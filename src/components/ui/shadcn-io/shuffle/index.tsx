@@ -247,7 +247,7 @@ const Shuffle: React.FC<ShuffleProps> = ({
           tl.to(
             targets,
             {
-              x: (i, t: HTMLElement) => parseFloat(t.getAttribute('data-final-x') || '0'),
+              x: (_i, t: HTMLElement) => parseFloat(t.getAttribute('data-final-x') || '0'),
               duration,
               ease,
               force3D: true,
