@@ -1,33 +1,34 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Signup from './pages/Signup'
+import SignIn from './pages/SignIn'
+import Dashboard from './pages/Dashboard'
+import Landing from './pages/Landing'
+import { ThemeProvider } from './components/theme-provider'
+import VerifyEmail from './pages/VerifyEmail'
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  const routeList = [
+    {path: "/", element: <Landing/>},
+    {path: "/signup", element:<Signup/>},
+    {path: "/verify-email", element: <VerifyEmail /> },
+    {path: "/signin", element: <SignIn />},
+    {path: "/dashboard", element: <Dashboard/>}
+  ]
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+          <BrowserRouter>
+          <Routes>
+            {
+              routeList.map((route, index) => {
+                return <Route key={index} path={route.path} element={route.element} />;
+              })
+            }
+          </Routes>
+        </BrowserRouter>
+        </ThemeProvider>
     </>
   )
 }
