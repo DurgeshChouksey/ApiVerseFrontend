@@ -1,5 +1,3 @@
-import { ArrowRight } from 'lucide-react';
-
 export default function CTA() {
   return (
     <section className="relative px-4 py-24 md:px-6">
