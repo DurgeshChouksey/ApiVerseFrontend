@@ -1,8 +1,5 @@
-import React from 'react'
-
 import AnimatedBtn1 from '@/components/mvpblocks/animated-btn1'
 import { OtpInput } from '@/components/otp-input'
-import { motion } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
 
 const VerifyEmail = () => {

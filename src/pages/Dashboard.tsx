@@ -1,11 +1,6 @@
-import React, { useEffect } from 'react';
 import Navbar from '@/components/navbar';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 import { fetchWithAuth } from '@/lib/fetchWithAuth';
-
-
-
 
 
 

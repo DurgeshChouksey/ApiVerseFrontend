@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Children } from "react";
+import React from "react";
 
 interface AnimatedBtn1Props {
   action: () => void;
