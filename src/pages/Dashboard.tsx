@@ -32,7 +32,7 @@ const Dashboard = () => {
       <div className='wrapper max-w-7xl px-4 mx-auto mt-30 md:mt-20'>
       <Navbar isLoggedIn={true} currentPage='dashboard' ></Navbar>
         <h1>
-          {/* {userInfo?.data?.data?.user?.username} */}
+          {user.username}
         </h1>
       </div>
     </div>

@@ -219,16 +219,14 @@ export default function SignUp() {
                 >
                   By signing in you agree to our{' '}
                   <Link
-                    prefetch={false}
-                    href="#"
+                    to="#"
                     className="text-muted-foreground hover:text-primary underline"
                   >
                     terms of service
                   </Link>{' '}
                   and{' '}
                   <Link
-                    prefetch={false}
-                    href="#"
+                    to="#"
                     className="text-muted-foreground hover:text-primary underline"
                   >
                     privacy policy
