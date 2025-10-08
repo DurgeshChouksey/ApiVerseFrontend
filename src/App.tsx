@@ -6,6 +6,9 @@ import Landing from './pages/Landing'
 import { ThemeProvider } from './components/theme-provider'
 import VerifyEmail from './pages/VerifyEmail'
 import Loading from './pages/Loading'
+import PublicApi from './components/PublicApi'
+import MyApi from './components/MyApi'
+import Subscribed from './components/Subscribed'
 
 function App() {
 
@@ -15,7 +18,10 @@ function App() {
     {path: "/signup", element:<Signup/>},
     {path: "/verify-email", element: <VerifyEmail /> },
     {path: "/signin", element: <SignIn />},
-    {path: "/dashboard", element: <Dashboard/>}
+    {path: "/dashboard", element: <Dashboard/>},
+    {path: "/public", element: <PublicApi/>},
+    {path: "/myapi", element: <MyApi/>},
+    {path: "/subscribed", element: <Subscribed/>}
   ]
 
   return (
