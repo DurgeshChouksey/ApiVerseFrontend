@@ -5,10 +5,12 @@ import Dashboard from './pages/Dashboard'
 import Landing from './pages/Landing'
 import { ThemeProvider } from './components/theme-provider'
 import VerifyEmail from './pages/VerifyEmail'
+import Loading from './pages/Loading'
 
 function App() {
 
   const routeList = [
+    {path:"/loading", element: <Loading/>},
     {path: "/", element: <Landing/>},
     {path: "/signup", element:<Signup/>},
     {path: "/verify-email", element: <VerifyEmail /> },

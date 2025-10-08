@@ -1,73 +1,44 @@
-// src/lib/fetchWithAuth.ts
 import axios from 'axios';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-// Utility to get tokens from localStorage (or cookies)
-const getAccessToken = () => localStorage.getItem('accessToken');
-const getRefreshToken = () => localStorage.getItem('refreshToken');
-const setTokens = (accessToken: string, refreshToken?: string) => {
-  localStorage.setItem('accessToken', accessToken);
-  if (refreshToken) localStorage.setItem('refreshToken', refreshToken);
-};
-
 export const fetchWithAuth = async (
   url: string,
-  options: { method?: string; data?: any } = {}
+  options: { method?: string; data?: any; headers?: Record<string, string> } = {}
 ) => {
-  try {
-    const token = getAccessToken();
-
+  const makeRequest = async () => {
     const response = await axios({
       url: `${BASE_URL}${url}`,
       method: options.method || 'GET',
       data: options.data || {},
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      withCredentials: true, // if using cookies
+      headers: options.headers || {},
+      withCredentials: true,
     });
+    return response.data; // directly return data
+  };
 
-    return response ;
+  try {
+    return await makeRequest();
   } catch (error: any) {
-    // If unauthorized, try to refresh token
     if (error.response?.status === 401) {
       try {
-        const refreshToken = getRefreshToken();
-        if (!refreshToken) throw new Error('No refresh token available');
-
+        // try refreshing token
         const refreshResponse = await axios.post(
           `${BASE_URL}/api/v1/auth/refresh-token`,
-          { refreshToken },
+          {},
           { withCredentials: true }
         );
 
-        // Save new tokens
-        setTokens(refreshResponse.data.accessToken, refreshResponse.data.refreshToken);
-
-        // Retry original request
-        const retryResponse = await axios({
-          url: `${BASE_URL}${url}`,
-          method: options.method || 'GET',
-          data: options.data || {},
-          headers: {
-            Authorization: `Bearer ${refreshResponse.data.accessToken}`,
-            'Content-Type': 'application/json',
-          },
-          withCredentials: true,
-        });
-
-        return retryResponse.data;
+        if (refreshResponse.status === 200) {
+          // retry original request
+          return await makeRequest();
+        }
       } catch (refreshError) {
-        // If refresh fails, clear tokens and redirect to login
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
+        // redirect to login if refresh fails
         window.location.href = '/signin';
-        throw refreshError;
+        return null;
       }
     }
-
-    throw error;
+    return null;
   }
 };

@@ -78,7 +78,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, currentPage }) => {
         {isLoggedIn && currentPage === 'landing' && (
           <>
             <ModeToggle></ModeToggle>
-            <Button onClick={() => console.log("API Hub")}>API Hub</Button>
+            <Button onClick={() => navigate('/dashboard')}>API Hub</Button>
             <Button title='LogOut' size={"icon"}><LogOut/></Button>
             <Button title='Profile' size={"icon"} className='rounded-full'><User/></Button>
           </>

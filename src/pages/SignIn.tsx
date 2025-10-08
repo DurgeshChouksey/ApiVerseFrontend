@@ -32,8 +32,8 @@ export default function SignIn() {
                 password
               }
             });
-            // console.log(response);
-            setSuccessMessage(response.data.message);
+            console.log(response);
+            setSuccessMessage(response.message);
             setErrorMessage("");
 
 

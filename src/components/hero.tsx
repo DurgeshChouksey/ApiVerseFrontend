@@ -115,7 +115,7 @@ export default function Hero() {
 
             <div className="z-10 mt-2 inline-flex items-center justify-start gap-3">
               <a
-                href="#"
+                href="/dashboard"
                 className={cn(
                   buttonVariants({
                     size: 'lg',
