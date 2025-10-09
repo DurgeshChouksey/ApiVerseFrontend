@@ -10,7 +10,9 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { motion } from 'framer-motion';
 import Shuffle from '@/components/ui/shadcn-io/shuffle';
-import { fetchWithAuth } from '@/lib/fetchWithAuth';
+import { useDispatch } from 'react-redux';
+import { loginUser } from '@/features/user/userSlice';
+import type { AppDispatch } from '@/redux/store';
 
 
 export default function SignIn() {
@@ -22,28 +24,33 @@ export default function SignIn() {
     const [successMessage, setSuccessMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
 
-    async function signinHandler() {
-        try {
-            console.log("Hello")
 
-            const response = await fetchWithAuth('/api/v1/auth/login', {
+
+    const dispatch = useDispatch<AppDispatch>();
+
+
+    async function signinHandler() {
+            const {payload} = await dispatch(loginUser({
               method: 'POST',
               data: {
                 identifier,
                 password
               }
-            });
+            }));
 
-            console.log(response);
-            setSuccessMessage(response.message);
-            setErrorMessage("");
-            setTimeout(() => {
-                navigate('/public')
-            }, 1000);
+            if(payload?.user) {
+              setErrorMessage("");
+              setSuccessMessage(payload.message);
+              setTimeout(() => {
+                  navigate('/public')
+              }, 1000);
+            }
 
-          } catch (error: any) {
-            setErrorMessage(error?.response?.data?.message);
-        }
+            if(payload?.status != 200) {
+              setErrorMessage(payload?.response?.data?.message);
+            }
+
+
     }
 
     async function handleGoogleSignin() {

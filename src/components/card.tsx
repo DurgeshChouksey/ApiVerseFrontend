@@ -15,7 +15,7 @@ export default function Card({category, lastUpdate, name, description, ownerName
   }
 
   return (
-    <article className="bg-background flex w-full max-w-[300px] rounded-md flex-col items-start border-4 border-black p-6 shadow-[8px_8px_0_0_#fff] transition-shadow duration-300 hover:shadow-[12px_12px_0_0_#000] dark:border-white dark:shadow-[8px_8px_0_0_#000] dark:hover:shadow-[12px_12px_0_0_#fff]">
+    <article className="bg-background flex w-full rounded-md flex-col items-start border-2 border-black p-6 dark:border-white hover:border-primary hover:dark:border-primary">
       <div className="mb-2 w-full flex items-center justify-between gap-x-2 text-xs">
         <div className="text-foreground border-2 border-black bg-red-500 px-3 py-1 font-bold dark:border-white rounded-md">
           {category}

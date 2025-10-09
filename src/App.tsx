@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Signup from './pages/Signup'
 import SignIn from './pages/SignIn'
@@ -8,15 +10,30 @@ import Loading from './pages/Loading'
 import PublicApi from './components/public-api'
 import MyApi from './components/my-api'
 import Navbar from './components/navbar'
-import Subscribed from './components/Subscribed'
+import Subscribed from './components/subscribed'
 import ProtectedRoute from './components/protected-route'
 import NotFound from './components/NotFound'
+import { checkAuth } from './features/user/userSlice'
+import type { AppDispatch } from '@/redux/store';
 
 
 
 function App() {
 
-  const pathname = window.location.pathname;
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // to check auth on every refresh
+  const dispatch = useDispatch<AppDispatch>();
+
+  async function fetchUser() {
+    const {payload} = await dispatch(checkAuth());
+    console.log(payload)
+    if(payload?.user) setIsLoggedIn(true);
+  }
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
 
   const routeList = [
@@ -34,7 +51,7 @@ function App() {
     <>
         <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
           <BrowserRouter>
-          <Navbar isLoggedIn={true} currentPage={pathname}/>
+          <Navbar isLoggedIn={isLoggedIn} />
           <Routes>
             {
               routeList.map((route, index) => {

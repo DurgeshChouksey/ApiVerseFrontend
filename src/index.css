@@ -139,3 +139,7 @@
 .animate-gradient-x {
   animation: moveGradientLeft 20s linear infinite;
 }
+
+.stats-div {
+  @apply w-full sm:w-[25%] h-[100px] flex justify-center items-center border-black border-2 dark:border-white rounded-md text-2xl 
+}

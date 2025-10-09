@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { Menu, LogIn, UserPlus, Heart, User, LogOut, Search, Command} from 'lucide-react';
@@ -6,17 +6,35 @@ import { Button } from './ui/button';
 import AnimatedBtn1 from './mvpblocks/animated-btn1';
 import { ModeToggle } from './mode-toggle';
 import Shuffle from './ui/shadcn-io/shuffle';
+import { useDispatch } from 'react-redux';
+import type { AppDispatch } from '@/redux/store';
+import { logoutUser } from '@/features/user/userSlice';
+
 
 interface NavbarProps {
   isLoggedIn: boolean;
   currentPage: string;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, currentPage }) => {
-  console.log(currentPage);
+const Navbar: React.FC<NavbarProps> = ({ isLoggedIn }) => {
+
+  const location = useLocation();
+  const currentPage = location.pathname;
+
+
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null);
+
+
+  // logout logic
+  const dispatch = useDispatch<AppDispatch>();
+  const handleLogout = async () => {
+    const res = await dispatch(logoutUser());
+    console.log(res?.payload);
+    navigate("/signin");
+  };
+
 
   // command + k global search event trigger
   useEffect(() => {
@@ -80,7 +98,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, currentPage }) => {
           <>
             <ModeToggle></ModeToggle>
             <Button onClick={() => navigate('/dashboard')}>API Hub</Button>
-            <Button title='LogOut' size={"icon"}><LogOut/></Button>
+            <Button onClick={() => handleLogout()} title='LogOut' size={"icon"}><LogOut/></Button>
             <Button title='Profile' size={"icon"} className='rounded-full'><User/></Button>
           </>
         )}
@@ -116,7 +134,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, currentPage }) => {
           <div className='flex gap-2'>
             <ModeToggle></ModeToggle>
             <Button onClick={() => navigate('/dashboard')}>API Hub</Button>
-            <Button title='LogOut' size={"icon"}><LogOut/></Button>
+            <Button onClick={() => handleLogout()} title='LogOut' size={"icon"}><LogOut/></Button>
             <Button size={"icon"} className='rounded-full'><User/></Button>
           </div>
         </>
@@ -139,7 +157,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, currentPage }) => {
 
   return (
     <div>
-      <div className='fixed top-0 left-0 right-0 z-50 backdrop-blur-xs h-14 flex items-center px-4 justify-between'>
+      <div className='border-b-2 fixed top-0 left-0 right-0 z-50 backdrop-blur-xs h-16 flex items-center px-4 justify-between'>
         <LeftSide />
         <RightSide />
         {/* Mobile hamburger */}
@@ -152,7 +170,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, currentPage }) => {
       </div>
       {/* Search bar on dashboard mobile view */}
       {isLoggedIn && (currentPage === '/public' || currentPage === '/myapi' || currentPage === '/subscribed') &&  <div className='flex justify-center'>
-        <div className='flex items-center w-[90%] fixed top-15 rounded-md border border-gray-300 px-3 py-1 md:hidden'>
+        <div className='flex items-center w-[90%] fixed top-20 rounded-md border border-gray-300 px-3 py-1 md:hidden'>
           <Search />
           <input type='text' placeholder='Search APIs...' className='border-none outline-none w-[100%] px-3 py-1' />
          </div>
