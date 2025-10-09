@@ -25,6 +25,7 @@ export default function SignIn() {
     async function signinHandler() {
         try {
             console.log("Hello")
+
             const response = await fetchWithAuth('/api/v1/auth/login', {
               method: 'POST',
               data: {
@@ -32,15 +33,15 @@ export default function SignIn() {
                 password
               }
             });
+
             console.log(response);
             setSuccessMessage(response.message);
             setErrorMessage("");
-
-
             setTimeout(() => {
-                navigate('/dashboard')
+                navigate('/public')
             }, 1000);
-        } catch (error: any) {
+
+          } catch (error: any) {
             setErrorMessage(error?.response?.data?.message);
         }
     }

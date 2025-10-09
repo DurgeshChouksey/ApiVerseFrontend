@@ -8,7 +8,7 @@ const Sidebar = () => {
       pathname === path ? "bg-blue-500 text-white" : "text-gray-700 hover:bg-gray-100"
     }`;
   return (
-    <aside className="h-screen w-64 bg-gradient-to-b from-red-500 via-pink-500 to-red-600 text-white fixed top-20 left-0 flex flex-col p-6 shadow-lg z-50">
+    <aside className="hidden md:block h-screen w-[18%] border-2 border-black dark:border-white text-white fixed top-16 left-0 flex flex-col p-6 shadow-lg">
       <nav className="flex flex-col mt-10 space-y-2">
         <Link to="/public" className={linkClasses("/public")}>Public API</Link>
         <Link to="/myapi" className={linkClasses("/myapi")}>My API</Link>
@@ -16,6 +16,7 @@ const Sidebar = () => {
       </nav>
     </aside>
   );
+
 };
 
 export default Sidebar;

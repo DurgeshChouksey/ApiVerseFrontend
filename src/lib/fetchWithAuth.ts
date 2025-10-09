@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+
 export const fetchWithAuth = async (
   url: string,
   options: { method?: string; data?: any; headers?: Record<string, string> } = {}
@@ -38,7 +39,9 @@ export const fetchWithAuth = async (
         window.location.href = '/signin';
         return null;
       }
+    } else {
+      throw error;
     }
-    return null;
+
   }
 };

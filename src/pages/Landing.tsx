@@ -12,7 +12,6 @@ const Landing = () => {
 
   return (
     <div>
-      <Navbar isLoggedIn={false ? true : false} currentPage='landing'></Navbar>
       <Hero></Hero>
       <Features></Features>
       <CTA></CTA>

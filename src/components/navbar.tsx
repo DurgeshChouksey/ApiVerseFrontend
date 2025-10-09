@@ -9,10 +9,11 @@ import Shuffle from './ui/shadcn-io/shuffle';
 
 interface NavbarProps {
   isLoggedIn: boolean;
-  currentPage: 'landing' | 'dashboard';
+  currentPage: string;
 }
 
 const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, currentPage }) => {
+  console.log(currentPage);
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null);
@@ -75,7 +76,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, currentPage }) => {
             <AnimatedBtn1 action={() => console.log("Contact Support")}>Support</AnimatedBtn1>
           </>
         )}
-        {isLoggedIn && currentPage === 'landing' && (
+        {isLoggedIn && currentPage === '/' && (
           <>
             <ModeToggle></ModeToggle>
             <Button onClick={() => navigate('/dashboard')}>API Hub</Button>
@@ -83,7 +84,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, currentPage }) => {
             <Button title='Profile' size={"icon"} className='rounded-full'><User/></Button>
           </>
         )}
-        {isLoggedIn && currentPage === 'dashboard' && (
+        {isLoggedIn && (currentPage === '/public' || currentPage === '/myapi' || currentPage === '/subscribed') && (
           <>
             <ModeToggle></ModeToggle>
             <div className='flex items-center  rounded-md border border-gray-300 px-3 py-1'>
@@ -110,7 +111,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, currentPage }) => {
           <Button onClick={() => console.log("Contact Support")}>Support</Button>
         </div>
       )}
-      {isLoggedIn && currentPage === 'landing' && (
+      {isLoggedIn && currentPage === '/' && (
         <>
           <div className='flex gap-2'>
             <ModeToggle></ModeToggle>
@@ -120,7 +121,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, currentPage }) => {
           </div>
         </>
       )}
-      {isLoggedIn && currentPage === 'dashboard' && (
+      {isLoggedIn && (currentPage === '/public' || currentPage === '/myapi' || currentPage === '/subscribed') && (
         <>
           <div className='flex gap-2'>
             <Button onClick={() => console.log("Studio")}>Studio</Button>
@@ -138,7 +139,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, currentPage }) => {
 
   return (
     <div>
-      <div className='fixed top-0 left-0 right-0 z-50 backdrop-blur-xs max-w-7xl mx-auto h-14 flex items-center px-4 justify-between'>
+      <div className='fixed top-0 left-0 right-0 z-50 backdrop-blur-xs h-14 flex items-center px-4 justify-between'>
         <LeftSide />
         <RightSide />
         {/* Mobile hamburger */}
@@ -150,7 +151,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, currentPage }) => {
         </div>
       </div>
       {/* Search bar on dashboard mobile view */}
-      {isLoggedIn && currentPage === 'dashboard' &&  <div className='flex justify-center'>
+      {isLoggedIn && (currentPage === '/public' || currentPage === '/myapi' || currentPage === '/subscribed') &&  <div className='flex justify-center'>
         <div className='flex items-center w-[90%] fixed top-15 rounded-md border border-gray-300 px-3 py-1 md:hidden'>
           <Search />
           <input type='text' placeholder='Search APIs...' className='border-none outline-none w-[100%] px-3 py-1' />
