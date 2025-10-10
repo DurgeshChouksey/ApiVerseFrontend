@@ -1,19 +1,20 @@
-import { useEffect } from 'react'
+import type { RootState } from '@/redux/store';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import NotFound from './NotFound';
+import { use } from 'react';
 
-const ProtectedRoute = ({children}) => {
+const ProtectedRoute = ({children} : any) => {
 
-    const navigate = useNavigate();
+    const userInfo : any = useSelector<RootState>(state => state.user);
 
-    const isAuthenticated = true;
+    let isAuthenticated = false;
 
-    useEffect(() => {
-        if(!isAuthenticated) navigate('/signin')
-    }, [])
+    if(userInfo.user) isAuthenticated = true;
 
 
   return (
-    children
+    <>{isAuthenticated ? children : <NotFound/>}</>
   )
 }
 

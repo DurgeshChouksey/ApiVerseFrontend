@@ -32,11 +32,15 @@ export default function SignUp() {
             setSuccessMessage(response.data.message);
             setErrorMessage("");
             setTimeout(() => {
-                navigate('/verify-email')
+                navigate('/public')
             }, 1000);
         } catch (error: any) {
             setErrorMessage(error?.response?.data?.message);
         }
+    }
+
+    async function handleGoogleSignup() {
+      window.location.href = 'https://apiverse.durgesh65178.workers.dev/api/v1/auth/google';
     }
 
 
@@ -183,6 +187,7 @@ export default function SignUp() {
                   whileTap={{ scale: 0.98 }}
                 >
                   <Button
+                    onClick={() => handleGoogleSignup()}
                     variant="secondary"
                     className="bg-primary-foreground text-primary hover:bg-primary-foreground/95 w-full shadow-[0_4px_16px_var(--border)] duration-300 dark:shadow-[0_4px_14px_var(--muted-foreground)]"
                   >

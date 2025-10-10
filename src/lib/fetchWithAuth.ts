@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { redirect } from 'react-router-dom';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -30,14 +31,14 @@ export const fetchWithAuth = async (
           { withCredentials: true }
         );
 
+
+
         if (refreshResponse.status === 200) {
           // retry original request
           return await makeRequest();
         }
       } catch (refreshError) {
-        // redirect to login if refresh fails
-        window.location.href = '/signin';
-        return null;
+        throw refreshError;
       }
     } else {
       throw error;

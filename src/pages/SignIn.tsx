@@ -11,7 +11,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { motion } from 'framer-motion';
 import Shuffle from '@/components/ui/shadcn-io/shuffle';
 import { useDispatch } from 'react-redux';
-import { loginUser } from '@/features/user/userSlice';
+import { loginUser, googleLoginUser } from '@/features/user/userSlice';
 import type { AppDispatch } from '@/redux/store';
 
 
@@ -54,11 +54,7 @@ export default function SignIn() {
     }
 
     async function handleGoogleSignin() {
-      try {
-
-      } catch (error) {
-
-      }
+      window.location.href = 'https://apiverse.durgesh65178.workers.dev/api/v1/auth/google';
     }
 
 

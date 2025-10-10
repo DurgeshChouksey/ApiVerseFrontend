@@ -10,10 +10,29 @@ export const loginUser = createAsyncThunk(
       const res = await fetchWithAuth('/api/v1/auth/login', credentials);
       return res;
     } catch (err : any) {
-      return rejectWithValue(err);
+      if (axios.isAxiosError(err)) {
+        return rejectWithValue(err.response?.data || { message: err.message });
+      }
+      return rejectWithValue({ message: "Unknown error" });
     }
   }
 );
+
+// Thunk to google login
+export const googleLoginUser = createAsyncThunk(
+  "user/googleLoginUser",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await fetchWithAuth('/api/v1/auth/google')
+      return res;
+    } catch (err : any) {
+      if (axios.isAxiosError(err)) {
+        return rejectWithValue(err.response?.data || { message: err.message });
+      }
+      return rejectWithValue({ message: "Unknown error" });
+    }
+  }
+)
 
 // Thunk to check auth
 export const checkAuth = createAsyncThunk(
@@ -24,8 +43,11 @@ export const checkAuth = createAsyncThunk(
         method: 'POST'
       });
       return res;
-    } catch (err) {
-      return rejectWithValue(err);
+    } catch (err : any) {
+      if (axios.isAxiosError(err)) {
+        return rejectWithValue(err.response?.data || { message: err.message });
+      }
+      return rejectWithValue({ message: "Unknown error" });
     }
   }
 );
@@ -39,8 +61,11 @@ export const logoutUser = createAsyncThunk(
         method: 'POST'
       })
       return res;
-    } catch (err) {
-      return rejectWithValue(err);
+    } catch (err : any) {
+      if (axios.isAxiosError(err)) {
+        return rejectWithValue(err.response?.data || { message: err.message });
+      }
+      return rejectWithValue({ message: "Unknown error" });
     }
   }
 )
@@ -69,8 +94,32 @@ const userSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(checkAuth.fulfilled, (state, action) => {
+      .addCase(googleLoginUser.pending, (state) => {
+        state.loading = true;
+        state.error = null
+      })
+      .addCase(googleLoginUser.fulfilled, (state, action) => {
+        state.loading = false;
         state.user = action.payload;
+        state.error = null
+      })
+      .addCase(googleLoginUser.rejected, (state, action : any) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.user = null;
+      })
+      .addCase(checkAuth.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(checkAuth.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+      })
+      .addCase(checkAuth.rejected, (state, action : any) => {
+        state.loading = false;
+        state.user = null;
+        state.error = action.payload;
       })
       .addCase(logoutUser.pending, (state) => {
           state.loading = true;

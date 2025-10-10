@@ -52,25 +52,27 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn }) => {
 
   const Logo = () => (
       // <h1 className='text-xl sm:text-3xl font-bold font-logo bg-primary'>API'Verse</h1>
-        <Shuffle
-          text="API'VERSE"
-          shuffleDirection="right"
-          duration={1}
-          animationMode="evenodd"
-          shuffleTimes={1.5}
-          ease="power3.out"
-          loop={true}
-          stagger={0.05}
-          threshold={0.1}
-          triggerOnce={false}
-          triggerOnHover={true}
-          respectReducedMotion={true}
-          className="text-primary"
-          style={{
-            fontSize: '1.8rem',
-            fontFamily: 'Silkscreen'
-          }}
-            />
+        <div className='cursor-pointer' onClick={() => navigate('/')}>
+          <Shuffle
+            text="API'VERSE"
+            shuffleDirection="right"
+            duration={1}
+            animationMode="evenodd"
+            shuffleTimes={1.5}
+            ease="power3.out"
+            loop={true}
+            stagger={0.05}
+            threshold={0.1}
+            triggerOnce={false}
+            triggerOnHover={true}
+            respectReducedMotion={true}
+            className="text-primary"
+            style={{
+              fontSize: '1.8rem',
+              fontFamily: 'Silkscreen'
+            }}
+              />
+        </div>
   );
 
   const LeftSide = () => (
@@ -112,7 +114,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn }) => {
             </div>
             <Button onClick={() => console.log("Studio")}>Studio</Button>
             <Button title='Favorite' size={"icon"}><Heart/></Button>
-            <Button title='Profile' size={"icon"} className='rounded-full'><User/></Button>
+            <Button onClick={() => handleLogout()} title='Profile' size={"icon"} className='rounded-full'><User/></Button>
           </>
         )}
       </div>
