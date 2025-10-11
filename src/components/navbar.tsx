@@ -9,6 +9,7 @@ import Shuffle from './ui/shadcn-io/shuffle';
 import { useDispatch } from 'react-redux';
 import type { AppDispatch } from '@/redux/store';
 import { logoutUser } from '@/features/user/userSlice';
+import { current } from '@reduxjs/toolkit';
 
 
 interface NavbarProps {
@@ -104,7 +105,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn }) => {
             <Button title='Profile' size={"icon"} className='rounded-full'><User/></Button>
           </>
         )}
-        {isLoggedIn && (currentPage === '/public' || currentPage === '/myapi' || currentPage === '/subscribed') && (
+        {isLoggedIn && (currentPage === '/public' || currentPage === '/workspace') && (
           <>
             <ModeToggle></ModeToggle>
             <div className='flex items-center  rounded-md border border-gray-300 px-3 py-1'>
@@ -141,7 +142,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn }) => {
           </div>
         </>
       )}
-      {isLoggedIn && (currentPage === '/public' || currentPage === '/myapi' || currentPage === '/subscribed') && (
+      {isLoggedIn && (currentPage === '/public' || currentPage === '/workspace') && (
         <>
           <div className='flex gap-2'>
             <Button onClick={() => console.log("Studio")}>Studio</Button>
@@ -170,9 +171,9 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn }) => {
           <MobileMenu />
         </div>
       </div>
-      {/* Search bar on dashboard mobile view */}
-      {isLoggedIn && (currentPage === '/public' || currentPage === '/myapi' || currentPage === '/subscribed') &&  <div className='flex justify-center'>
-        <div className='flex items-center w-[90%] fixed top-20 rounded-md border border-gray-300 px-3 py-1 md:hidden'>
+      {/* Search bar on public mobile view */}
+      {isLoggedIn && (currentPage === '/public' || currentPage === '/workspace') &&  <div className='flex justify-center border-2'>
+        <div className='flex items-center w-[90%] absolute top-20 rounded-md border border-gray-300 px-3 py-1 md:hidden'>
           <Search />
           <input type='text' placeholder='Search APIs...' className='border-none outline-none w-[100%] px-3 py-1' />
          </div>

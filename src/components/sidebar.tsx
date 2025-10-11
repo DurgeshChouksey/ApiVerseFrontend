@@ -10,9 +10,8 @@ const Sidebar = () => {
   return (
     <aside className="hidden h-screen w-[200px] border-r-2 border-gray-300 dark:border-gray-800 text-white fixed top-16 left-0 md:flex flex-col px-3 shadow-lg">
       <nav className="flex flex-col mt-10 space-y-2">
-        <Link to="/public" className={linkClasses("/public")}>Public API</Link>
-        <Link to="/myapi" className={linkClasses("/myapi")}>My API</Link>
-        <Link to="/subscribed" className={linkClasses("/subscribed")}>Subscribed</Link>
+        <Link to="/public" className={linkClasses("/public")}>Discover</Link>
+        <Link to="/workspace" className={linkClasses("/workspace")}>Workspace</Link>
       </nav>
     </aside>
   );

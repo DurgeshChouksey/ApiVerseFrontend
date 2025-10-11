@@ -15,6 +15,7 @@ import ProtectedRoute from "./components/protected-route";
 import NotFound from "./components/NotFound";
 import { checkAuth } from "./features/user/userSlice";
 import { type RootState, type AppDispatch } from "@/redux/store";
+import Workspace from "./pages/Workspace";
 
 function App() {
 
@@ -44,18 +45,10 @@ function App() {
 			),
 		},
 		{
-			path: "/myapi",
+			path: "/workspace",
 			element: (
 				<ProtectedRoute>
-					<MyApi />
-				</ProtectedRoute>
-			),
-		},
-		{
-			path: "/subscribed",
-			element: (
-				<ProtectedRoute>
-					<Subscribed />
+					<Workspace />
 				</ProtectedRoute>
 			),
 		},

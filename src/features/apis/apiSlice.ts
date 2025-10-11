@@ -4,9 +4,9 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // to fetch public api's
 export const publicApis = createAsyncThunk(
   "apis/publicApis",
-  async (_, { rejectWithValue }) => {
+  async ({page, sort} : any, { rejectWithValue }) => {
     try {
-      const res = await fetchWithAuth('/api/v1/apis');
+      const res = await fetchWithAuth(`/api/v1/apis?page=${page}&sort=${sort}`);
       return res;
     } catch (err : any) {
       return rejectWithValue(err);
@@ -17,9 +17,9 @@ export const publicApis = createAsyncThunk(
 // to fetch my api's
 export const myApis = createAsyncThunk(
   "apis/myApis",
-  async (_, { rejectWithValue }) => {
+  async ({page, sort} : any, { rejectWithValue }) => {
     try {
-      const res = await fetchWithAuth('/api/v1/apis/my');
+      const res = await fetchWithAuth(`/api/v1/apis/my?page=${page}&sort=${sort}`);
       return res;
     } catch (err : any) {
       return rejectWithValue(err);
@@ -32,12 +32,26 @@ export const myApis = createAsyncThunk(
 
 const apiSlice = createSlice({
     name: "apis",
-    initialState: [],
+    initialState: {
+      loading: false,
+      data: null,
+      error: null
+    },
     reducers: {},
     extraReducers: (builder) => {
         builder
+            .addCase(publicApis.pending, (state) => {
+              state.loading = true;
+              state.error = null;
+            })
             .addCase(publicApis.fulfilled, (state, action) => {
-                state = action.payload;
+                state.loading = false;
+                state.data = action.payload;
+            })
+            .addCase(publicApis.rejected, (state, action: any) => {
+              state.loading = false;
+              state.error = action.payload;
+              state.data = null;
             })
             .addCase(myApis.fulfilled, (state, action) => {
                 state = action.payload;

@@ -1,8 +1,22 @@
+import { fetchWithAuth } from "@/lib/fetchWithAuth";
+import type { RootState } from "@/redux/store";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-const TopCategories = ({ publicApi }: any) => {
+const TopCategories = () => {
+
+	const payload : any = useSelector<RootState>(state => state.apis);
+
+
+	if (!payload.data?.totalApis?.length) {
+		return null; // render nothing only on first load when no data
+	}
+
+	const publicApi = payload?.data?.totalApis || [];
+
 
 	// Calculate top categories
-	const categoryCounts = publicApi.reduce(
+	const categoryCounts = publicApi.length > 0 && publicApi.reduce(
 		(acc : any, api : any) => {
 			if (api.category) {
 				acc[api.category] = (acc[api.category] || 0) + 1;
@@ -31,7 +45,7 @@ const TopCategories = ({ publicApi }: any) => {
 							APIs offer tools for developers to bolster the security of their
 							applications and systems...
 						</div>
-						<button className="mt-2 text-sm px-3 py-1 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white rounded transition duration-700">
+						<button className="mt-2 text-sm px-3 py-1 text-black bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary dark:text-white rounded transition duration-700">
 							Browse Category
 						</button>
 					</div>

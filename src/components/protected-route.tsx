@@ -1,21 +1,23 @@
-import type { RootState } from '@/redux/store';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import NotFound from './NotFound';
-import { use } from 'react';
+import type { RootState } from "@/redux/store";
+import { useSelector } from "react-redux";
+import NotFound from "./NotFound";
+import Loading from "@/pages/Loading";
 
-const ProtectedRoute = ({children} : any) => {
+const ProtectedRoute = ({ children }: any) => {
+	const { user, loading } = useSelector((state: RootState) => state.user);
 
-    const userInfo : any = useSelector<RootState>(state => state.user);
+	if (loading) {
+		// While checking auth → show loader instead of NotFound
+		return <Loading />;
+	}
 
-    let isAuthenticated = false;
+	if (!user) {
+		// Auth check complete → user not found
+		return <NotFound />;
+	}
 
-    if(userInfo.user) isAuthenticated = true;
-
-
-  return (
-    <>{isAuthenticated ? children : <NotFound/>}</>
-  )
-}
+	// User authenticated → render the page
+	return <>{children}</>;
+};
 
 export default ProtectedRoute;

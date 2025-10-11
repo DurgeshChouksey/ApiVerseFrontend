@@ -1,53 +1,97 @@
-import Card from '@/components/card';
-import Sidebar from '@/components/sidebar';
-import { myApis } from '@/features/apis/apiSlice';
-import { redableDate } from '@/lib/redableDates';
-import type { AppDispatch } from '@/redux/store';
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import Card from "@/components/card";
+import Sidebar from "@/components/sidebar";
+import { myApis } from "@/features/apis/apiSlice";
+import { redableDate } from "@/lib/redableDates";
+import Loading from "@/pages/Loading";
+import type { AppDispatch } from "@/redux/store";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import BasicPagination from "./pagination";
 
+const MyApi = () => {
+	const [myApi, setMyApi] = useState([]);
+	const [totalPages, setTotalPages] = useState(1);
+	const [currentPage, setCurrentPage] = useState(1);
+	const [loading, setLoading] = useState(false);
+	const [sort, setSort] = useState(false);
 
-const PublicApi = () => {
+	const dispatch = useDispatch<AppDispatch>();
 
-  const [myApi, setMyApi] = useState([]);
+	async function fetchMyApis(page = 1) {
+		setLoading(true);
+		const { payload } = await dispatch(myApis({ page, sort }));
+		setMyApi(payload.apis);
+    console.log(myApi)
+		setTotalPages(Math.ceil(payload.total / payload.limit));
+		setCurrentPage(payload.page);
+		setLoading(false);
+	}
 
-  const dispatch = useDispatch<AppDispatch>();
+	useEffect(() => {
+		fetchMyApis();
+	}, []);
 
-  async function fetchMyApi() {
-    const {payload} = await dispatch(myApis());
-    setMyApi(payload.apis);
-  }
+	if (loading) {
+		<Loading />;
+	}
 
-  useEffect(() => {
-    fetchMyApi();
-  }, []);
+	const handleSortChange = (e: any) => {
+		setSort(e.target.value);
+		fetchMyApis(1);
+	};
 
-  return (
-    <div>
-      <div className='mt-30 md:mt-12'>
-        <div>
-          <Sidebar />
-          <div className='md:ml-[18%] p-6'>
-            <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 justify-items-center gap-6'>
-              {myApi.length > 0 && myApi.map((api) => (
-                <Card
-                  key={api?.id}
-                  name={api?.name}
-                  description={api?.description}
-                  ownerName={api?.owner?.username}
-                  category={api?.category}
-                  lastUpdate={redableDate(api.updatedAt)}
-                  totalCalls={api?.apiLogs[0]?.totalCalls}
-                  totalErrors={api?.apiLogs[0]?.totalErrors}
-                  averageLatency={api?.apiLogs[0]?.averageLatency}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
+	return (
+		  <div>
+        <div className="md:ml-[18%] p-6">
+						<h1 className="mt-10 text-3xl font-poppins">My API'S</h1>
+            <p className="mt-2 text-gray-300 text-gray-700">This section shows you information regarding APIs that you, your teams or your organizations have created. The scope is determined by your context.</p>
 
-export default PublicApi;
+						{/* sorting */}
+						<div className="mt-7">
+							<label htmlFor="sort" className="mr-2 font-semibold">
+								Sort by:
+							</label>
+							<select
+								id="sort"
+								value={sort}
+								onChange={handleSortChange}
+								className="border border-gray-300 rounded px-2 py-1"
+							>
+								<option value="views">Views</option>
+								<option value="rating">Rating</option>
+								<option value="createdAt">Created At</option>
+							</select>
+						</div>
+
+						<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 justify-items-center gap-6 mt-5">
+							{myApi.length > 0 &&
+								myApi.map((api) => (
+									<Card
+										key={api?.id}
+										apiId={api?.id}
+										name={api?.name}
+										description={api?.description}
+										ownerName={api?.owner?.username}
+										category={api?.category}
+										lastUpdate={redableDate(api.updatedAt)}
+										totalCalls={api?.apiLogs[0]?.totalCalls}
+										totalErrors={api?.apiLogs[0]?.totalErrors}
+										averageLatency={api?.apiLogs[0]?.averageLatency}
+										isBookmarked={api?.isBookmarked}
+									/>
+								))}
+						</div>
+					</div>
+
+					<BasicPagination
+						totalPages={totalPages}
+						currentPage={currentPage}
+						siblingsCount={2}
+						onPageChange={(page) => fetchMyApis(page)}
+						showDemo={false}
+					/>
+				</div>
+	);
+};
+
+export default MyApi;
