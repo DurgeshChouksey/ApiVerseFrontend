@@ -18,6 +18,7 @@ import { type RootState, type AppDispatch } from "@/redux/store";
 import Workspace from "./pages/Workspace";
 import AboutUs from "./pages/About";
 import Bookmark from "./pages/Bookmark";
+import Studio from "./pages/studio";
 
 function App() {
 
@@ -53,6 +54,14 @@ function App() {
 			element: (
 				<ProtectedRoute>
 					<Workspace />
+				</ProtectedRoute>
+			),
+		},
+		{
+			path: "/studio",
+			element: (
+				<ProtectedRoute>
+					<Studio />
 				</ProtectedRoute>
 			),
 		},
