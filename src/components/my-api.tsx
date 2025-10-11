@@ -3,9 +3,9 @@ import Sidebar from "@/components/sidebar";
 import { myApis } from "@/features/apis/apiSlice";
 import { redableDate } from "@/lib/redableDates";
 import Loading from "@/pages/Loading";
-import type { AppDispatch } from "@/redux/store";
+import type { AppDispatch, RootState } from "@/redux/store";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import BasicPagination from "./pagination";
 
 const MyApi = () => {
@@ -15,11 +15,14 @@ const MyApi = () => {
 	const [loading, setLoading] = useState(false);
 	const [sort, setSort] = useState(false);
 
+  const filter = useSelector((state: RootState) => state.apis.filter);
+
 	const dispatch = useDispatch<AppDispatch>();
 
 	async function fetchMyApis(page = 1) {
 		setLoading(true);
-		const { payload } = await dispatch(myApis({ page, sort }));
+		const { payload } = await dispatch(myApis({ page, sort, filter }));
+    console.log(payload)
 		setMyApi(payload.apis);
     console.log(myApi)
 		setTotalPages(Math.ceil(payload.total / payload.limit));
@@ -29,7 +32,7 @@ const MyApi = () => {
 
 	useEffect(() => {
 		fetchMyApis();
-	}, []);
+	}, [filter, sort]);
 
 	if (loading) {
 		<Loading />;
@@ -43,8 +46,8 @@ const MyApi = () => {
 	return (
 		  <div>
         <div className="md:ml-[18%] p-6">
-						<h1 className="mt-10 text-3xl font-poppins">My API'S</h1>
-            <p className="mt-2 text-gray-300 text-gray-700">This section shows you information regarding APIs that you, your teams or your organizations have created. The scope is determined by your context.</p>
+						<h1 className="mt-5 text-3xl font-poppins">My API'S</h1>
+            <p className="mt-2 dark:text-gray-300 text-gray-700">This section shows you information regarding APIs that you, your teams or your organizations have created. The scope is determined by your context.</p>
 
 						{/* sorting */}
 						<div className="mt-7">

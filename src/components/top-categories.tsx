@@ -33,7 +33,7 @@ const TopCategories = () => {
 
 	return (
 		<div>
-			<h1 className="mt-10 text-3xl font-poppins">TOP CATEGORIES</h1>
+			<h1 className="sm:mt-10 text-3xl font-poppins">TOP CATEGORIES</h1>
 			<div className="mt-5 flex gap-6 flex-col sm:flex-row">
 				{topCategories.map((category) => (
 					<div
@@ -41,7 +41,7 @@ const TopCategories = () => {
 						className="border-2 border-black dark:border-white  rounded-md flex flex-col items-start p-4 gap-2 hover:border-primary hover:dark:border-primary"
 					>
 						<div className="font-semibold text-lg">{category}</div>
-						<div className="text-sm text-gray-600">
+						<div className="text-sm text-gray-700 dark:text-gray-300">
 							APIs offer tools for developers to bolster the security of their
 							applications and systems...
 						</div>

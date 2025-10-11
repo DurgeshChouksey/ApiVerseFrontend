@@ -1,8 +1,8 @@
 import Card from "@/components/card";
 import Sidebar from "@/components/sidebar";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import type { AppDispatch } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "@/redux/store";
 import { publicApis } from "@/features/apis/apiSlice";
 import { redableDate } from "@/lib/redableDates";
 import TopCategories from "./top-categories";
@@ -19,10 +19,13 @@ const PublicApi = () => {
 	const [loading, setLoading] = useState(false);
 	const [sort, setSort] = useState(false);
 
+	const filter = useSelector((state: RootState) => state.apis.filter);
+
 	const fetchPublicApis = async (page = 1) => {
 		setLoading(true);
-		const { payload } = await dispatch(publicApis({ page, sort }));
+		const { payload } = await dispatch(publicApis({ page, sort, filter }));
 		setPublicApi(payload.apis);
+		console.log(payload.apis)
 		setTotalPages(Math.ceil(payload.total / payload.limit));
 		setCurrentPage(payload.page);
 		setLoading(false);
@@ -30,7 +33,7 @@ const PublicApi = () => {
 
 	useEffect(() => {
 		fetchPublicApis(); // fetch first page on mount
-	}, [sort]);
+	}, [filter, sort]);
 
 	if (loading) {
 		<Loading />;
@@ -44,7 +47,7 @@ const PublicApi = () => {
 
 	return (
 		<div>
-			<div className="mt-30 md:mt-10">
+			<div className="md:mt-10">
 				<div>
 					{/* left */}
 					<Sidebar />
@@ -54,7 +57,7 @@ const PublicApi = () => {
 						{/* top categories */}
 						<TopCategories />
 
-						<h1 className="mt-10 text-3xl font-poppins">PUBLIC API'S</h1>
+						<h1 className="mt-5 text-3xl font-poppins">PUBLIC API'S</h1>
 
 
 						{/* sorting */}

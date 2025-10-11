@@ -6,7 +6,7 @@ import React from "react";
 const Workspace = () => {
 	return (
 		<div>
-			<div className="mt-30 md:mt-12">
+			<div className="md:mt-12">
 				<Sidebar />
 
 				<div>

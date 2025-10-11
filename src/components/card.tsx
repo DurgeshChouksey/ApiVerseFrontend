@@ -24,7 +24,7 @@ export default function Card({apiId,category, lastUpdate, name, description, own
           {category}
         </div>
         <button onClick={handleBookmark} aria-label="Bookmark API" className="text-2xl leading-none">
-          <Heart color={bookmarked ? 'red' : 'white'} />
+          <Heart color={bookmarked ? 'red' : '#9ca3af'} />
         </button>
       </div>
       <div className="group relative">

@@ -16,6 +16,8 @@ import NotFound from "./components/NotFound";
 import { checkAuth } from "./features/user/userSlice";
 import { type RootState, type AppDispatch } from "@/redux/store";
 import Workspace from "./pages/Workspace";
+import AboutUs from "./pages/About";
+import Bookmark from "./pages/Bookmark";
 
 function App() {
 
@@ -35,6 +37,8 @@ function App() {
 		{ path: "/", element: <Landing /> },
 		{ path: "/signup", element: <Signup /> },
 		{ path: "/verify-email", element: <VerifyEmail /> },
+		{path: "/about", element: <AboutUs/>},
+		{path: "/bookmarks", element: <Bookmark/>},
 		{ path: "/signin", element: <SignIn /> },
 		{
 			path: "/public",
