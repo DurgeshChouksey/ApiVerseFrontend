@@ -41,7 +41,7 @@ const AddProjectForm: React.FC<AddProjectFormProps> = ({ isOpen, onClose }) => {
   });
   const [errors, setErrors] = useState<FormErrors>({});
 
-  const closeModal = () => {
+  const closeForm = () => {
     onClose();
     setErrors({});
     // Reset form when closing
@@ -55,6 +55,7 @@ const AddProjectForm: React.FC<AddProjectFormProps> = ({ isOpen, onClose }) => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
+    console.log([name],value)
     setForm((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: undefined }));
   };
@@ -73,7 +74,7 @@ const AddProjectForm: React.FC<AddProjectFormProps> = ({ isOpen, onClose }) => {
     e.preventDefault();
     if (!validate()) return;
     console.log("Form submitted:", form);
-    closeModal();
+    closeForm();
   };
 
   if (!isOpen) return null;
@@ -81,7 +82,7 @@ const AddProjectForm: React.FC<AddProjectFormProps> = ({ isOpen, onClose }) => {
   return (
     <div
       className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center z-50 p-4"
-      onClick={closeModal}
+      onClick={closeForm}
     >
       <div
         className="bg-background border border-border rounded-lg shadow-lg p-4 sm:p-6 w-full max-w-sm sm:max-w-md lg:max-w-lg max-h-[90vh] overflow-auto"
@@ -180,7 +181,7 @@ const AddProjectForm: React.FC<AddProjectFormProps> = ({ isOpen, onClose }) => {
           <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-2">
             <button
               type="button"
-              onClick={closeModal}
+              onClick={closeForm}
               className="px-4 py-2 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-sm sm:text-base order-2 sm:order-1"
             >
               Cancel

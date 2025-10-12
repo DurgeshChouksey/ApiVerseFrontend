@@ -59,7 +59,7 @@ const Studio = () => {
         </div>
       </div>
       
-      {/* Add Project Form Modal */}
+      {/* Add Project Form  */}
       <AddProjectForm isOpen={isFormOpen} onClose={closeForm} />
     </div>
   );
