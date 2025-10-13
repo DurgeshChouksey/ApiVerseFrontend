@@ -33,7 +33,7 @@ const TopCategories = () => {
 
 	return (
 		<div>
-			<h1 className="sm:mt-10 text-3xl font-poppins">TOP CATEGORIES</h1>
+			<h1 className="sm:mt-5 text-3xl font-poppins">TOP CATEGORIES</h1>
 			<div className="mt-5 flex gap-6 flex-col sm:flex-row">
 				{topCategories.map((category) => (
 					<div

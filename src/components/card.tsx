@@ -1,10 +1,11 @@
 import { fetchWithAuth } from "@/lib/fetchWithAuth";
 import { ChartNetwork, Gauge, Heart, Ban } from "lucide-react";
 import { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 
 
-
-export default function Card({apiId,category, lastUpdate, name, description, ownerName, totalCalls, totalErrors, averageLatency, isBookmarked}) {
+export default function Card({apiId,category, lastUpdate, name, description, ownerName, totalCalls, totalErrors, averageLatency, isBookmarked} : any) {
+  const navigate = useNavigate();
   const [bookmarked, setBookmarked] = useState(isBookmarked);
 
   async function handleBookmark() {
@@ -18,7 +19,7 @@ export default function Card({apiId,category, lastUpdate, name, description, own
   }
 
   return (
-    <article className="bg-background flex w-full rounded-md flex-col items-start border-2 border-black p-6 dark:border-white hover:border-primary hover:dark:border-primary">
+    <article onClick={() => navigate(`/playground/${apiId}`)} className="cursor-pointer bg-background flex w-full rounded-md flex-col items-start border-2 border-black p-6 dark:border-white hover:border-primary hover:dark:border-primary">
       <div className="mb-2 w-full flex items-center justify-between gap-x-2 text-xs">
         <div className="text-white  border-black bg-red-500 px-3 py-1 font-bold dark:border-white rounded-md">
           {category}

@@ -1,6 +1,6 @@
 import Card from "@/components/card";
 import Sidebar from "@/components/sidebar";
-import { myApis } from "@/features/apis/apiSlice";
+import { myApis } from "@/features/apis/apisSlice";
 import { redableDate } from "@/lib/redableDates";
 import Loading from "@/pages/Loading";
 import type { AppDispatch, RootState } from "@/redux/store";

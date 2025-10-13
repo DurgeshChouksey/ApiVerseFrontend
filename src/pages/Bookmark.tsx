@@ -1,5 +1,5 @@
 import Card from "@/components/card";
-import { bookmarkedApis } from "@/features/apis/apiSlice";
+import { bookmarkedApis } from "@/features/apis/apisSlice";
 import { redableDate } from "@/lib/redableDates";
 import type { AppDispatch } from "@/redux/store";
 import React, { useEffect, useState } from "react";
@@ -52,6 +52,7 @@ const Bookmark = () => {
 									totalCalls={api?.apiLogs[0]?.totalCalls}
 									totalErrors={api?.apiLogs[0]?.totalErrors}
 									averageLatency={api?.apiLogs[0]?.averageLatency}
+                                    isBookmarked={true}
 								/>
 							))}
 					</div>

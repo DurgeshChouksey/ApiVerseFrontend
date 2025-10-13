@@ -153,3 +153,8 @@
     transform: rotate(360deg);
   }
 }
+
+
+.form-section-button {
+  @apply dark:text-white cursor-pointer
+}
