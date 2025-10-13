@@ -64,6 +64,10 @@ function App() {
 			element: (
 				<ProtectedRoute>
 					<Studio />
+				</ProtectedRoute>
+			),
+		},
+		{
 			path: "/playground/:apiId",
 			element: (
 				<ProtectedRoute>

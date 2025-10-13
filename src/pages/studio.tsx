@@ -5,7 +5,7 @@ import { fetchWithAuth } from "@/lib/fetchWithAuth";
 import { redableDate } from "@/lib/redableDates";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "@/redux/store";
-import { myApis } from "@/features/apis/apiSlice";
+import { myApis } from "@/features/apis/apisSlice";
 
 interface ProjectFormData {
   projectName: string;
