@@ -16,6 +16,7 @@ import { type RootState, type AppDispatch } from "@/redux/store";
 import Workspace from "./pages/Workspace";
 import AboutUs from "./pages/About";
 import Bookmark from "./pages/Bookmark";
+import Studio from "./pages/studio";
 import ApiPlayground from "./pages/ApiPlayground";
 
 function App() {
@@ -59,6 +60,10 @@ function App() {
 			),
 		},
 		{
+			path: "/studio",
+			element: (
+				<ProtectedRoute>
+					<Studio />
 			path: "/playground/:apiId",
 			element: (
 				<ProtectedRoute>
