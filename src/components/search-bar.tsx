@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { setFilter } from "@/features/apis/apiSlice";
+import { setFilter } from "@/features/apis/apisSlice";
 import { Search, Command } from "lucide-react";
 import type { AppDispatch } from "@/redux/store";
 

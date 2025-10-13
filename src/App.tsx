@@ -8,9 +8,7 @@ import { ThemeProvider } from "./components/theme-provider";
 import VerifyEmail from "./pages/VerifyEmail";
 import Loading from "./pages/Loading";
 import PublicApi from "./components/public-api";
-import MyApi from "./components/my-api";
 import Navbar from "./components/navbar";
-import Subscribed from "./components/subscribed";
 import ProtectedRoute from "./components/protected-route";
 import NotFound from "./components/NotFound";
 import { checkAuth } from "./features/user/userSlice";
@@ -18,6 +16,7 @@ import { type RootState, type AppDispatch } from "@/redux/store";
 import Workspace from "./pages/Workspace";
 import AboutUs from "./pages/About";
 import Bookmark from "./pages/Bookmark";
+import ApiPlayground from "./pages/ApiPlayground";
 
 function App() {
 
@@ -25,10 +24,13 @@ function App() {
   const userInfo : any = useSelector<RootState>(state => state.user);
   let isLoggedIn = !!userInfo?.user;
 
-	useEffect(async () => {
-		const res = await dispatch(checkAuth());
-		console.log(res);
-	}, [dispatch]);
+  async function auth() {
+	await dispatch(checkAuth());
+  }
+
+	useEffect( () => {
+		auth();
+	}, []);
 
 
   // route list
@@ -56,6 +58,22 @@ function App() {
 				</ProtectedRoute>
 			),
 		},
+		{
+			path: "/playground/:apiId",
+			element: (
+				<ProtectedRoute>
+					<ApiPlayground />
+				</ProtectedRoute>
+			),
+		},
+		{
+			path: "/playground/:apiId/:endpointId/test",
+			element: (
+				<ProtectedRoute>
+					<ApiPlayground />
+				</ProtectedRoute>
+			),
+		},
 	];
 
 	return (
@@ -68,7 +86,6 @@ function App() {
 							<Route key={index} path={route.path} element={route.element} />
 						);
 					})}
-
 					<Route path={"*"} element={<NotFound />}></Route>
 				</Routes>
 			</ThemeProvider>

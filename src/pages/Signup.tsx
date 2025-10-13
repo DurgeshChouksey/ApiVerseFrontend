@@ -22,20 +22,22 @@ export default function SignUp() {
 
     async function signupHandler() {
         try {
-            const response = await fetchWithAuth('api/v1/auth/signup', {
+            const response = await fetchWithAuth('/api/v1/auth/signup', {
               method: 'POST',
               data: {
                 username,
                 password
               }
             })
-            setSuccessMessage(response.data.message);
+            console.log(response);
+            setSuccessMessage(response.message);
             setErrorMessage("");
             setTimeout(() => {
                 navigate('/public')
             }, 1000);
         } catch (error: any) {
-            setErrorMessage(error?.response?.data?.message);
+            console.log(error);
+            setErrorMessage(error?.response?.data?.errors[0]?.message);
         }
     }
 

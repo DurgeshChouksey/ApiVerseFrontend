@@ -1,5 +1,5 @@
 import Card from "@/components/card";
-import { myApis, subscribedApis } from "@/features/apis/apiSlice";
+import { myApis, subscribedApis } from "@/features/apis/apisSlice";
 import { redableDate } from "@/lib/redableDates";
 import Loading from "@/pages/Loading";
 import type { AppDispatch, RootState } from "@/redux/store";
