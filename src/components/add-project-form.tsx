@@ -12,17 +12,15 @@ const categories = [
   "Email",
   "Social Media",
 ];
-
-interface AddProjectFormProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-interface FormData {
+ 
+interface ProjectFormData {
   projectName: string;
   description: string;
   category: string;
   team: string;
+  baseUrl: string;
+  visibility: string;
+  requiresApiKey: boolean;
 }
 
 interface FormErrors {
@@ -30,40 +28,61 @@ interface FormErrors {
   description?: string;
   category?: string;
   team?: string;
+  baseUrl?: string;
 }
 
-const AddProjectForm: React.FC<AddProjectFormProps> = ({ isOpen, onClose }) => {
-  const [form, setForm] = useState<FormData>({
+interface AddProjectFormProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onAddProject: (data: ProjectFormData) => void;
+}
+
+const AddProjectForm: React.FC<AddProjectFormProps> = ({
+  isOpen,
+  onClose,
+  onAddProject,
+}) => {
+  const [form, setForm] = useState<ProjectFormData>({
     projectName: "",
     description: "",
     category: "",
     team: "Personal",
+    baseUrl: "",
+    visibility: "public",
+    requiresApiKey: false,
   });
   const [errors, setErrors] = useState<FormErrors>({});
 
   const closeForm = () => {
     onClose();
     setErrors({});
-    // Reset form when closing
     setForm({
       projectName: "",
       description: "",
       category: "",
       team: "Personal",
+      baseUrl: "",
+      visibility: "public",
+      requiresApiKey: false,
     });
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
     const { name, value } = e.target;
-    console.log([name],value)
     setForm((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: undefined }));
   };
 
   const validate = () => {
     const newErrors: FormErrors = {};
-    if (!form.projectName.trim()) newErrors.projectName = "Project Name is required";
-    if (!form.description.trim()) newErrors.description = "Description is required";
+    if (!form.projectName.trim())
+      newErrors.projectName = "Project Name is required";
+    if (!form.description.trim())
+      newErrors.description = "Description is required";
     if (!form.category.trim()) newErrors.category = "Category is required";
     if (!form.team.trim()) newErrors.team = "Team is required";
     setErrors(newErrors);
@@ -73,7 +92,7 @@ const AddProjectForm: React.FC<AddProjectFormProps> = ({ isOpen, onClose }) => {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validate()) return;
-    console.log("Form submitted:", form);
+    onAddProject(form);
     closeForm();
   };
 
@@ -88,11 +107,16 @@ const AddProjectForm: React.FC<AddProjectFormProps> = ({ isOpen, onClose }) => {
         className="bg-background border border-border rounded-lg shadow-lg p-4 sm:p-6 w-full max-w-sm sm:max-w-md lg:max-w-lg max-h-[90vh] overflow-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="text-xl sm:text-2xl font-bold mb-4 text-foreground">Add API Project</h2>
+        <h2 className="text-xl sm:text-2xl font-bold mb-4 text-foreground">
+          Add API Project
+        </h2>
         <form onSubmit={onSubmit} noValidate>
           {/* Project Name */}
           <div className="mb-4">
-            <label htmlFor="projectName" className="block font-semibold mb-1 text-foreground text-sm sm:text-base">
+            <label
+              htmlFor="projectName"
+              className="block font-semibold mb-1 text-foreground text-sm sm:text-base"
+            >
               Project Name
             </label>
             <input
@@ -106,13 +130,18 @@ const AddProjectForm: React.FC<AddProjectFormProps> = ({ isOpen, onClose }) => {
               }`}
             />
             {errors.projectName && (
-              <p className="text-destructive text-xs sm:text-sm mt-1">{errors.projectName}</p>
+              <p className="text-destructive text-xs sm:text-sm mt-1">
+                {errors.projectName}
+              </p>
             )}
           </div>
 
           {/* Description */}
           <div className="mb-4">
-            <label htmlFor="description" className="block font-semibold mb-1 text-foreground text-sm sm:text-base">
+            <label
+              htmlFor="description"
+              className="block font-semibold mb-1 text-foreground text-sm sm:text-base"
+            >
               Description
             </label>
             <textarea
@@ -126,13 +155,18 @@ const AddProjectForm: React.FC<AddProjectFormProps> = ({ isOpen, onClose }) => {
               }`}
             />
             {errors.description && (
-              <p className="text-destructive text-xs sm:text-sm mt-1">{errors.description}</p>
+              <p className="text-destructive text-xs sm:text-sm mt-1">
+                {errors.description}
+              </p>
             )}
           </div>
 
           {/* Category */}
           <div className="mb-4">
-            <label htmlFor="category" className="block font-semibold mb-1 text-foreground text-sm sm:text-base">
+            <label
+              htmlFor="category"
+              className="block font-semibold mb-1 text-foreground text-sm sm:text-base"
+            >
               Category
             </label>
             <select
@@ -152,13 +186,18 @@ const AddProjectForm: React.FC<AddProjectFormProps> = ({ isOpen, onClose }) => {
               ))}
             </select>
             {errors.category && (
-              <p className="text-destructive text-xs sm:text-sm mt-1">{errors.category}</p>
+              <p className="text-destructive text-xs sm:text-sm mt-1">
+                {errors.category}
+              </p>
             )}
           </div>
 
           {/* Team */}
           <div className="mb-6">
-            <label htmlFor="team" className="block font-semibold mb-1 text-foreground text-sm sm:text-base">
+            <label
+              htmlFor="team"
+              className="block font-semibold mb-1 text-foreground text-sm sm:text-base"
+            >
               Team
             </label>
             <select
@@ -173,7 +212,9 @@ const AddProjectForm: React.FC<AddProjectFormProps> = ({ isOpen, onClose }) => {
               <option value="Personal">Personal</option>
             </select>
             {errors.team && (
-              <p className="text-destructive text-xs sm:text-sm mt-1">{errors.team}</p>
+              <p className="text-destructive text-xs sm:text-sm mt-1">
+                {errors.team}
+              </p>
             )}
           </div>
 
