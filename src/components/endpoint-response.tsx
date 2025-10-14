@@ -1,7 +1,9 @@
 import type { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
 import JsonView from "@uiw/react-json-view";
-import { darkTheme } from '@uiw/react-json-view/dark';
+import { darkTheme } from "@uiw/react-json-view/dark";
+import { lightTheme } from '@uiw/react-json-view/light';
+import { useTheme } from "@/components/theme-provider";
 
 interface ResponseProps {
 	response?: {
@@ -12,6 +14,12 @@ interface ResponseProps {
 }
 
 const Response: React.FC<ResponseProps> = () => {
+	const { theme } = useTheme();
+	const isDarkMode =
+		theme === "dark" ||
+		(theme === "system" &&
+			window.matchMedia("(prefers-color-scheme: dark)").matches);
+
 	const { response, loading, error } = useSelector(
 		(state: RootState) => state.endpointTest
 	);
@@ -59,7 +67,7 @@ const Response: React.FC<ResponseProps> = () => {
 					<div className="max-w-[100%] border border-gray-200 dark:border-gray-700 rounded-md p-3 bg-gray-50 dark:bg-[#191819] overflow-auto max-h-[400px]">
 						<JsonView
 							value={response.data}
-							style={darkTheme}
+							style={isDarkMode ? darkTheme : lightTheme}
 						/>
 					</div>
 				) : (
@@ -75,8 +83,8 @@ const Response: React.FC<ResponseProps> = () => {
 				{response.headers ? (
 					<div className="border border-gray-200 dark:border-gray-700 rounded-md p-3 bg-gray-50 dark:bg-[#191819] overflow-auto max-h-[300px]">
 						<JsonView
-							value={response.data}
-							style={darkTheme}
+							value={response.headers}
+							style={isDarkMode ? darkTheme : lightTheme}
 						/>
 					</div>
 				) : (

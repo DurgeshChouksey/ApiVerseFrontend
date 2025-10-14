@@ -18,6 +18,7 @@ import AboutUs from "./pages/About";
 import Bookmark from "./pages/Bookmark";
 import Studio from "./pages/studio";
 import ApiPlayground from "./pages/ApiPlayground";
+import SubscriptionDetails from "./pages/subscriptionDetails";
 
 function App() {
 
@@ -80,6 +81,14 @@ function App() {
 			element: (
 				<ProtectedRoute>
 					<ApiPlayground />
+				</ProtectedRoute>
+			),
+		},
+		{
+			path: "/subscription_details/:apiId",
+			element: (
+				<ProtectedRoute>
+					<SubscriptionDetails />
 				</ProtectedRoute>
 			),
 		},

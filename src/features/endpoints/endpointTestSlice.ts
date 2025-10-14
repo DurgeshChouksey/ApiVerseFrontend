@@ -3,11 +3,12 @@ import { fetchWithAuth } from "@/lib/fetchWithAuth";
 
 export const testEndpoint = createAsyncThunk(
   "endpoints/testEndpoint",
-  async ({ apiId, endpointId, payload }: { apiId: string; endpointId: string; payload: any }, thunkAPI) => {
+  async ({ apiId, endpointId, payload, headers }: { apiId: string; endpointId: string; payload: any; headers: any }, thunkAPI) => {
     try {
       const res = await fetchWithAuth(`/api/v1/apis/${apiId}/endpoints/test/${endpointId}`, {
         method: "POST",
         data: payload,
+        headers: headers,
       });
       return res;
     } catch (err: any) {

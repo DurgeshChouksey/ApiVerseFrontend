@@ -4,20 +4,20 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "@/redux/store";
 import { publicApis } from "@/features/apis/apisSlice";
-import { redableDate } from "@/lib/redableDates";
 import TopCategories from "./top-categories";
 import BasicPagination from "./pagination";
 import Loading from "@/pages/Loading";
+import { HoverEffect } from "./ui/card-hover-effect";
+
 
 const PublicApi = () => {
 	const dispatch = useDispatch<AppDispatch>();
 
-	// to fetch public api
 	const [publicApi, setPublicApi] = useState<any[]>([]);
 	const [totalPages, setTotalPages] = useState(1);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [loading, setLoading] = useState(false);
-	const [sort, setSort] = useState(false);
+	const [sort, setSort] = useState("views");
 
 	const filter = useSelector((state: RootState) => state.apis.filter);
 
@@ -34,9 +34,7 @@ const PublicApi = () => {
 		fetchPublicApis(); // fetch first page on mount
 	}, [filter, sort]);
 
-	if (loading) {
-		<Loading />;
-	}
+	if (loading) return <Loading />;
 
 	const handleSortChange = (e: any) => {
 		setSort(e.target.value);
@@ -45,17 +43,16 @@ const PublicApi = () => {
 
 	return (
 		<div className="md:mt-10">
-			{/* left */}
+			{/* Sidebar */}
 			<Sidebar />
 
-			{/* right */}
+			{/* Main content */}
 			<div className="md:ml-[200px] p-6">
-				{/* top categories */}
 				<TopCategories />
 
 				<h1 className="mt-5 text-3xl font-poppins">PUBLIC API'S</h1>
 
-				{/* sorting */}
+				{/* Sorting dropdown */}
 				<div className="mt-7">
 					<label htmlFor="sort" className="mr-2 font-semibold">
 						Sort by:
@@ -72,24 +69,10 @@ const PublicApi = () => {
 					</select>
 				</div>
 
-				<div className="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 justify-items-center gap-6">
-					{publicApi.length > 0 &&
-						publicApi.map((api) => (
-							<Card
-								key={api?.id}
-								apiId={api?.id}
-								name={api?.name}
-								description={api?.description}
-								ownerName={api?.owner?.username}
-								category={api?.category}
-								lastUpdate={redableDate(api.updatedAt)}
-								totalCalls={api?.apiLogs[0]?.totalCalls}
-								totalErrors={api?.apiLogs[0]?.totalErrors}
-								averageLatency={api?.apiLogs[0]?.averageLatency}
-								isBookmarked={api?.isBookmarked}
-							/>
-						))}
-				</div>
+
+				<HoverEffect apis={publicApi} />
+
+				{/* Pagination */}
 				<BasicPagination
 					totalPages={totalPages}
 					currentPage={currentPage}

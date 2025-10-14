@@ -1,10 +1,9 @@
-import Card from "@/components/card";
 import { bookmarkedApis } from "@/features/apis/apisSlice";
-import { redableDate } from "@/lib/redableDates";
 import type { AppDispatch } from "@/redux/store";
-import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import Loading from "./Loading";
+import { HoverEffect } from "@/components/ui/card-hover-effect";
+import { useEffect, useState } from "react";
 
 const Bookmark = () => {
 	const [bookmarkedApi, setBookmakredApi] = useState([]);
@@ -15,6 +14,7 @@ const Bookmark = () => {
 	async function fetchBookmarkedApis() {
         setLoading(true);
 		const { payload }: any = await dispatch(bookmarkedApis());
+		console.log(payload)
 		setBookmakredApi(payload?.bookmarks);
         setLoading(false);
 	}
@@ -38,24 +38,7 @@ const Bookmark = () => {
 						your context.
 					</p>
 
-					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 justify-items-center gap-6 mt-5">
-						{bookmarkedApi.length > 0 &&
-							bookmarkedApi.map(({api}) => (
-								<Card
-									key={api?.id}
-									apiId={api?.id}
-									name={api?.name}
-									description={api?.description}
-									ownerName={api?.owner?.username}
-									category={api?.category}
-									lastUpdate={redableDate(api.updatedAt)}
-									totalCalls={api?.apiLogs[0]?.totalCalls}
-									totalErrors={api?.apiLogs[0]?.totalErrors}
-									averageLatency={api?.apiLogs[0]?.averageLatency}
-                                    isBookmarked={true}
-								/>
-							))}
-					</div>
+					<HoverEffect apis={bookmarkedApi.map((b: any) => b.api)} />
 				</div>
 
 			</div>

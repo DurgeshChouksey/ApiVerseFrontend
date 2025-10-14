@@ -12,7 +12,6 @@ import SearchBar from "../components/search-bar";
 
 interface NavbarProps {
 	isLoggedIn: boolean;
-	currentPage: string;
 }
 
 const Navbar: React.FC<NavbarProps> = ({ isLoggedIn }) => {
