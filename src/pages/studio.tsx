@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import AddProjectForm from "@/components/add-project-form";
 import Card from "@/components/card";
+import SearchBar from "@/components/search-bar";
 import { fetchWithAuth } from "@/lib/fetchWithAuth";
 import { redableDate } from "@/lib/redableDates";
-import { useDispatch } from "react-redux";
-import type { AppDispatch } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "@/redux/store";
 import { myApis } from "@/features/apis/apisSlice";
+import { HoverEffect } from "@/components/ui/card-hover-effect";
 
 interface ProjectFormData {
   projectName: string;
@@ -41,11 +43,12 @@ const Studio = () => {
   const closeForm = () => setIsFormOpen(false);
 
   const dispatch = useDispatch<AppDispatch>();
+  const filter = useSelector((state: RootState) => state.apis.filter);
 
   async function fetchMyApis() {
     setLoading(true);
     const { payload } = await dispatch(
-      myApis({ page: "", sort: "", filter: "" })
+      myApis({ page: "", sort: "", filter: filter })
     );
     setApis(payload.apis);
     setLoading(false);
@@ -75,9 +78,10 @@ const Studio = () => {
     }
   };
 
+  // Refetch APIs when filter changes
   useEffect(() => {
     fetchMyApis();
-  }, []);
+  }, [filter]);
 
   return (
     <div className="bg-background h-screen text-foreground overflow-hidden">
@@ -88,11 +92,7 @@ const Studio = () => {
 
         <div className="mt-6 flex flex-col sm:flex-row gap-4 sm:gap-0 sm:justify-between sm:items-center">
           <div className="flex-1 sm:flex-none sm:flex sm:gap-2">
-            <input
-              type="text"
-              placeholder="Search API Projects"
-              className="w-full rounded-md border border-input bg-background px-3 sm:px-4 py-2 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent text-sm sm:text-base"
-            />
+            <SearchBar />
           </div>
           <button
             onClick={openForm}
@@ -102,7 +102,7 @@ const Studio = () => {
           </button>
         </div>
 
-        <div className="mt-8 sm:mt-12 grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <div className="mt-8 sm:mt-12">
           {loading ? (
             <div className="col-span-full text-center px-4 sm:px-0">
               <p className="text-base sm:text-lg font-semibold text-foreground">
@@ -115,7 +115,7 @@ const Studio = () => {
                 {error}
               </p>
               <button
-                onClick={fetchUserApis}
+                onClick={fetchMyApis}
                 className="mt-4 sm:mt-6 px-4 py-2 border border-border bg-background hover:bg-accent hover:text-accent-foreground rounded-md transition-colors text-sm sm:text-base"
               >
                 Retry
@@ -138,21 +138,7 @@ const Studio = () => {
               </button>
             </div>
           ) : (
-            apis.map((api) => (
-              <Card
-                key={api.id}
-                apiId={api.id}
-                name={api.name}
-                description={api.description}
-                category={api.category}
-                ownerName={api.owner.username}
-                lastUpdate={redableDate(api.updatedAt)}
-                totalCalls={api.apiLogs[0]?.totalCalls || 0}
-                totalErrors={api.apiLogs[0]?.totalErrors || 0}
-                averageLatency={api.apiLogs[0]?.averageLatency || 0}
-                isBookmarked={api.isBookmarked}
-              />
-            ))
+            <HoverEffect apis={apis} />
           )}
         </div>
       </div>
