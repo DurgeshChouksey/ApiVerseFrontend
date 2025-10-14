@@ -159,7 +159,7 @@ export default function Hero() {
 
             <div className="relative z-10 mt-16 w-full">
               <img
-                src="https://i.postimg.cc/KjvHrBH0/bg.webp"
+                src="https://raw.githubusercontent.com/DurgeshChouksey/ApiVersePublicUtilities/main/public/DashBoard.png"
                 alt="API'VERSE API hub preview"
                 width={1000}
                 height={600}
