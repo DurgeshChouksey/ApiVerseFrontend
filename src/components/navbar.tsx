@@ -131,7 +131,6 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn }) => {
 							>
 								<User />
 							</Button>
-
 						</>
 					)}
 			</div>
@@ -156,8 +155,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn }) => {
 			)}
 			{isLoggedIn &&
 				currentPage !== "/public" &&
-				currentPage !== "/workspace" &&
-				(
+				currentPage !== "/workspace" && (
 					<>
 						<div className="flex gap-2">
 							<ModeToggle></ModeToggle>
@@ -200,10 +198,18 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn }) => {
 						</div>
 						<div className="flex gap-2 w-full">
 							<ModeToggle></ModeToggle>
-							<Button title="LogOut" size={"icon"}>
+							<Button
+								onClick={() => handleLogout()}
+								title="LogOut"
+								size={"icon"}
+							>
 								<LogOut />
 							</Button>
-							<Button size={"icon"} className="rounded-full">
+							<Button
+								onClick={() => navigate("/profile")}
+								size={"icon"}
+								className="rounded-full"
+							>
 								<User />
 							</Button>
 						</div>
@@ -230,7 +236,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn }) => {
 				(currentPage === "/public" || currentPage === "/workspace") && (
 					<div className="md:hidden mt-2 pb-2 w-full flex justify-center">
 						<div className="w-[90%]">
-						<SearchBar />
+							<SearchBar />
 						</div>
 					</div>
 				)}

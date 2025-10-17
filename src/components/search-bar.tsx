@@ -13,7 +13,7 @@ const SearchBar = () => {
   // 🔹 Debounce filter update
   useEffect(() => {
     const timeout = setTimeout(() => {
-      dispatch(setFilter(query));
+        dispatch(setFilter(query));
     }, 300);
     return () => clearTimeout(timeout);
   }, [query]);

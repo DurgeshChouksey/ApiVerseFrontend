@@ -297,10 +297,10 @@ const General = () => {
 				<div className="flex items-center justify-between mt-3">
 					<div>
 						{successMessage && (
-							<p className="text-xl text-green-400">{successMessage}</p>
+							<p className="text-xl text-green-500">{successMessage}</p>
 						)}
 						{errorMessage && (
-							<p className="text-xl text-red-400">{errorMessage}</p>
+							<p className="text-xl text-red-500">{errorMessage}</p>
 						)}
 					</div>
 					<div className="flex justify-end gap-4 ">

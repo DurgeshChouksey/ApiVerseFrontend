@@ -18,9 +18,12 @@ import AboutUs from "./pages/About";
 import Bookmark from "./pages/Bookmark";
 import Studio from "./pages/studio";
 import ApiPlayground from "./pages/ApiPlayground";
-import SubscriptionDetails from "./pages/subscriptionDetails";
+import SubscriptionDetails from "./pages/SubscriptionDetails";
 import UpdateApi from "./pages/UpdateApi";
 import Profile from "./pages/Profile";
+import ApiOverview from "./pages/ApiOverview";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
 
@@ -43,6 +46,8 @@ function App() {
 		{ path: "/", element: <Landing /> },
 		{ path: "/signup", element: <Signup /> },
 		{ path: "/verify-email", element: <VerifyEmail /> },
+		{ path: "/forgot-password", element: <ForgotPassword /> },
+		{ path: "/resetPassword", element: <ResetPassword /> },
 		{path: "/about", element: <AboutUs/>},
 		{path: "/bookmarks", element: <Bookmark/>},
 		{ path: "/signin", element: <SignIn /> },
@@ -107,6 +112,14 @@ function App() {
 			element: (
 				<ProtectedRoute>
 					<Profile />
+				</ProtectedRoute>
+			)
+		},
+		{
+			path: "/api-overview/:apiId",
+			element: (
+				<ProtectedRoute>
+					<ApiOverview />
 				</ProtectedRoute>
 			)
 		}

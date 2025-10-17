@@ -70,7 +70,7 @@ const MyApi = () => {
         totalPages={totalPages}
         currentPage={currentPage}
         siblingsCount={2}
-        onPageCXhange={(page) => fetchMyApis(page)}
+        onPageChange={(page) => fetchMyApis(page)}
         showDemo={false}
       />
     </div>

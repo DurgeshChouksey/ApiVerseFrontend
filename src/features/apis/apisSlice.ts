@@ -7,6 +7,7 @@ export const publicApis = createAsyncThunk(
   async ({page, sort, filter} : any, { rejectWithValue }) => {
     try {
       const res = await fetchWithAuth(`/api/v1/apis?page=${page}&sort=${sort}&filter=${filter}`);
+      console.log(res)
       return res;
     } catch (err : any) {
       return rejectWithValue(err);

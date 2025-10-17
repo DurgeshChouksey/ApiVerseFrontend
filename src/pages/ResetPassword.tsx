@@ -1,26 +1,32 @@
 import AnimatedBtn1 from "@/components/mvpblocks/animated-btn1";
-import { OtpInput } from "@/components/otp-input";
+
 import { Card, CardContent } from "@/components/ui/card";
 import { fetchWithAuth } from "@/lib/fetchWithAuth";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const VerifyEmail = () => {
+const ResetPassword = () => {
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const resetPasswordToken = queryParams.get("token");
+    console.log(resetPasswordToken)
+
 	const navigate = useNavigate();
-	const [verificationToken, setVerificationToken] = useState("");
+	const [password, setPassword] = useState("");
 	const [successMessage, setSuccessMessage] = useState("");
 	const [errorMessage, setErrorMessage] = useState("");
 
-	async function handleVerify() {
+
+	async function handleForgotPassword() {
 		try {
-			const res = await fetchWithAuth("/api/v1/auth/verify-email", {
+			const res = await fetchWithAuth("/api/v1/auth/reset-password", {
 				method: "POST",
-				data: { verificationToken },
+				data: { resetPasswordToken, password },
 			});
 			setErrorMessage("");
-			setSuccessMessage(res?.message || "");
+			setSuccessMessage(res.message);
 			setTimeout(() => {
-				navigate("/profile");
+				navigate('/signin')
 			}, 2000);
 		} catch (error) {
 			setSuccessMessage("");
@@ -38,11 +44,16 @@ const VerifyEmail = () => {
 				<CardContent className="space-y-6 p-8">
 					<div className="flex flex-col items-center px-3 sm:px-10 py-5 rounded-sm">
 						<h1 className="mb-2 text-2xl font-bold text-foreground dark:">
-							Verify Email
+							Reset Password
 						</h1>
-						<OtpInput onChange={setVerificationToken} /> {/* <-- pass setter */}
-						<AnimatedBtn1 action={handleVerify}>Submit</AnimatedBtn1>
-						<div>
+						<label htmlFor="">Enter new password</label>
+						<input
+							onChange={(e) => setPassword(e.target.value)}
+							className="px-2 py-1 rounded-md mt-2 mb-5 border-1 border-gray-200"
+							type="text"
+						/>
+						<AnimatedBtn1 action={handleForgotPassword}>Submit</AnimatedBtn1>
+						<div className="mt-5">
 							{successMessage && (
 								<p className="text-xl text-green-500">{successMessage}</p>
 							)}
@@ -57,4 +68,4 @@ const VerifyEmail = () => {
 	);
 };
 
-export default VerifyEmail;
+export default ResetPassword;

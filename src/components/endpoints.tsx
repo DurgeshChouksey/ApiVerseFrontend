@@ -3,6 +3,7 @@ import type { AppDispatch } from "@/redux/store";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { Button } from "./ui/button";
 
 const Endpoints = ({
 	pathname,
@@ -14,7 +15,7 @@ const Endpoints = ({
 	const navigate = useNavigate();
 	const dispatch = useDispatch<AppDispatch>();
 	const [endpoints, setEndpoints] = useState<any[]>([]);
-	const { endpointId } = useParams(); // 👈 get current endpoint ID from URL
+	const { endpointId } = useParams(); 
 	const filter = "";
 
 	useEffect(() => {
@@ -60,7 +61,9 @@ const Endpoints = ({
 	return (
 		<div>
 			{pathname !== "/public" && pathname !== "/workspace" && (
-				<div className="text-black dark:text-white md:pt-5 mt-5 dark:border-gray-800">
+				<div className="text-black dark:text-white md:pt-5 mt-5 border-t-2 dark:border-gray-800">
+
+					<a href={`/api-overview/${apiId}`} className="mt-3 py-1 block md:mx-2 mb-5 md:py-1 rounded-md bg-gray-200 dark:bg-[#191819] text-center">Api Overview</a>
 					<h1 className="hidden md:block mx-2 pl-4 py-1 rounded-md">Endpoints</h1>
 					<div className="hidden md:block">
 						<ul className="border-l-2 border-gray-500 flex flex-col mt-5 ml-6 pl-2 space-y-3">

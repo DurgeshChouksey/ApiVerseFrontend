@@ -229,6 +229,9 @@ export default function SignIn() {
                 {/* Already a user */}
                 <Button onClick={() => navigate('/signup')} className='w-full'>Don't have an account?</Button>
 
+                {/* forgot password */}
+                <a href="/forgot-password" className='hover:text-primary mb-2 text-center block underline'>Forgot password?</a>
+
                 {/* Terms */}
                 <motion.p
                   className="text-muted-foreground mt-2 text-center text-xs"
