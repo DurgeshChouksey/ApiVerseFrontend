@@ -1,5 +1,3 @@
-import Card from "@/components/card";
-import Sidebar from "@/components/sidebar";
 import { myApis } from "@/features/apis/apisSlice";
 import Loading from "@/pages/Loading";
 import type { AppDispatch, RootState } from "@/redux/store";
@@ -72,7 +70,7 @@ const MyApi = () => {
         totalPages={totalPages}
         currentPage={currentPage}
         siblingsCount={2}
-        onPageChange={(page) => fetchMyApis(page)}
+        onPageCXhange={(page) => fetchMyApis(page)}
         showDemo={false}
       />
     </div>

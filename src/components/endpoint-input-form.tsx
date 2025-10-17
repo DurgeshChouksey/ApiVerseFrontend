@@ -29,7 +29,7 @@ const EndpointInputForm: React.FC<EndpointInputFormProps> = ({
 	// ✅ Reset subscription state when switching APIs
 	useEffect(() => {
 		if (apiId) {
-			dispatch(resetSubscriptionState());
+			// dispatch(resetSubscriptionState());
 			dispatch(checkSubscription(apiId));
 		}
 	}, [apiId]);
@@ -60,9 +60,11 @@ const EndpointInputForm: React.FC<EndpointInputFormProps> = ({
 
 	// ✅ Fetch API details to check if it requires auth
 	const fetchApi = async () => {
-		const { payload } = await dispatch(getApi({ apiId }));
-		console.log(payload)
-		if (payload) setApi(payload);
+		if(apiId) {
+			const { payload } = await dispatch(getApi({ apiId }));
+			console.log(payload)
+			if (payload) setApi(payload);
+		}
 	};
 
 	useEffect(() => {
@@ -205,7 +207,8 @@ const EndpointInputForm: React.FC<EndpointInputFormProps> = ({
 						header.name,
 						formValues.headers[header.name] || header.value || "",
 						"Headers",
-						header.required
+						header.required,
+						header?.description
 					)
 				);
 			}

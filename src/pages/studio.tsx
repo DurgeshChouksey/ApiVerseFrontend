@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
 import AddProjectForm from "@/components/add-project-form";
-import Card from "@/components/card";
 import SearchBar from "@/components/search-bar";
 import { fetchWithAuth } from "@/lib/fetchWithAuth";
-import { redableDate } from "@/lib/redableDates";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "@/redux/store";
 import { myApis } from "@/features/apis/apisSlice";
 import { HoverEffect } from "@/components/ui/card-hover-effect";
+import BasicPagination from "@/components/pagination";
 
 interface ProjectFormData {
   projectName: string;
@@ -38,19 +37,24 @@ const Studio = () => {
   const [apis, setApis] = useState<ApiData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+   const [totalPages, setTotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const openForm = () => setIsFormOpen(true);
   const closeForm = () => setIsFormOpen(false);
 
-  const dispatch = useDispatch<AppDispatch>();
   const filter = useSelector((state: RootState) => state.apis.filter);
+  const dispatch = useDispatch<AppDispatch>();
 
-  async function fetchMyApis() {
+
+  async function fetchMyApis(page = 1) {
     setLoading(true);
     const { payload } = await dispatch(
-      myApis({ page: "", sort: "", filter: filter })
+      myApis({ page, sort: "", filter: filter })
     );
     setApis(payload.apis);
+    setTotalPages(Math.ceil(payload.total / payload.limit));
+    setCurrentPage(payload.page);
     setLoading(false);
   }
 
@@ -141,6 +145,14 @@ const Studio = () => {
             <HoverEffect apis={apis} />
           )}
         </div>
+
+        <BasicPagination
+          totalPages={totalPages}
+          currentPage={currentPage}
+          siblingsCount={2}
+          onPageChange={(page) => fetchMyApis(page)}
+          showDemo={false}
+        />
       </div>
 
       {/* Add Project Form */}

@@ -1,9 +1,11 @@
-import type { RootState } from "@/redux/store";
-import { useSelector } from "react-redux";
+import { type AppDispatch, type RootState } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
 import JsonView from "@uiw/react-json-view";
 import { darkTheme } from "@uiw/react-json-view/dark";
-import { lightTheme } from '@uiw/react-json-view/light';
+import { lightTheme } from "@uiw/react-json-view/light";
 import { useTheme } from "@/components/theme-provider";
+import { useEffect } from "react";
+import { clearResponse } from "@/features/endpoints/endpointTestSlice";
 
 interface ResponseProps {
 	response?: {
@@ -14,11 +16,18 @@ interface ResponseProps {
 }
 
 const Response: React.FC<ResponseProps> = () => {
+
+	const dispatch = useDispatch<AppDispatch>();
 	const { theme } = useTheme();
 	const isDarkMode =
 		theme === "dark" ||
 		(theme === "system" &&
 			window.matchMedia("(prefers-color-scheme: dark)").matches);
+
+	// 🧹 Clear response when route changes
+	useEffect(() => {
+		dispatch(clearResponse());
+	}, [location.pathname, dispatch]);
 
 	const { response, loading, error } = useSelector(
 		(state: RootState) => state.endpointTest

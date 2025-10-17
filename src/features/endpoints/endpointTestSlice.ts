@@ -42,6 +42,7 @@ const endpointTestSlice = createSlice({
       })
       .addCase(testEndpoint.rejected, (state, action) => {
         state.loading = false;
+        state.response = null;
         state.error = action.payload;
       });
   },

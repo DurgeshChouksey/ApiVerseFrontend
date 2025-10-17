@@ -101,14 +101,6 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn }) => {
 							>
 								<LogOut />
 							</Button>
-							<Button
-								onClick={() => navigate("/profile")}
-								title="Profile"
-								size={"icon"}
-								className="rounded-full"
-							>
-								<User />
-							</Button>
 						</>
 					)}
 				{isLoggedIn &&
@@ -131,6 +123,15 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn }) => {
 							>
 								<LogOut />
 							</Button>
+							<Button
+								onClick={() => navigate("/profile")}
+								title="Profile"
+								size={"icon"}
+								className="rounded-full"
+							>
+								<User />
+							</Button>
+
 						</>
 					)}
 			</div>
@@ -156,7 +157,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn }) => {
 			{isLoggedIn &&
 				currentPage !== "/public" &&
 				currentPage !== "/workspace" &&
-				currentPage !== "/" && (
+				(
 					<>
 						<div className="flex gap-2">
 							<ModeToggle></ModeToggle>

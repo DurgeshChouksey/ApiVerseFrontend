@@ -19,6 +19,8 @@ import Bookmark from "./pages/Bookmark";
 import Studio from "./pages/studio";
 import ApiPlayground from "./pages/ApiPlayground";
 import SubscriptionDetails from "./pages/subscriptionDetails";
+import UpdateApi from "./pages/UpdateApi";
+import Profile from "./pages/Profile";
 
 function App() {
 
@@ -92,6 +94,22 @@ function App() {
 				</ProtectedRoute>
 			),
 		},
+		{
+			path: "/studio/:apiId/*",
+			element: (
+				<ProtectedRoute>
+					<UpdateApi></UpdateApi>
+				</ProtectedRoute>
+			)
+		},
+		{
+			path: "/profile",
+			element: (
+				<ProtectedRoute>
+					<Profile />
+				</ProtectedRoute>
+			)
+		}
 	];
 
 	return (
