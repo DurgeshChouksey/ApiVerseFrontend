@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import AddEndpointForm from "@/components/add-endpoint-form";
 import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { type RootState, type AppDispatch } from "@/redux/store";
 import SearchBar from "@/components/search-bar";
-import { getEndpoints } from "@/features/endpoints/endpointSlice";
+import { useGetEndpointsQuery } from "@/features/endpoints/endpointsApi";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/redux/store";
 
 type Endpoint = {
   id: string;
@@ -15,34 +15,18 @@ type Endpoint = {
 };
 
 const Definition = () => {
-  const dispatch = useDispatch<AppDispatch>();
   const { apiId } = useParams<{ apiId: string }>();
-  const [endpoints, setEndpoints] = useState<Endpoint[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-  const [showAddForm, setShowAddForm] = useState<boolean>(false);
+  const [showAddForm, setShowAddForm] = useState(false);
   const [editingEndpoint, setEditingEndpoint] = useState<Endpoint | null>(null);
 
-  const filter = useSelector<RootState>((state) => state.search.filter);
+  // ✅ Get filter value from search slice
+  const filter = useSelector((state: RootState) => state.search.filter);
 
-  useEffect(() => {
-    async function fetchEndpoints() {
-      if (!apiId) return;
-      try {
-        setLoading(true);
-        setError(null);
-        const { payload } = await dispatch(getEndpoints({ apiId, filter }));
-        if (Array.isArray(payload)) setEndpoints(payload);
-        else setEndpoints([]);
-      } catch (e: any) {
-        console.log(e);
-        setError("Failed to load endpoints");
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchEndpoints();
-  }, [apiId, dispatch, filter]);
+  // ✅ Fetch endpoints using RTK Query
+  const { data: endpoints = [], isLoading, error } = useGetEndpointsQuery(
+    { apiId: apiId!, filter: filter || "" },
+    { skip: !apiId } // skip if apiId is not available
+  );
 
   const handleEditClick = (endpoint: Endpoint) => {
     setEditingEndpoint(endpoint);
@@ -105,7 +89,7 @@ const Definition = () => {
         Add and define your API endpoints.
       </p>
 
-      {/* Responsive layout for search bar and create button */}
+      {/* Search + Create button */}
       <div className="mt-3 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
         <SearchBar />
         <div className="flex justify-end sm:pr-7 md:justify-start">
@@ -118,7 +102,7 @@ const Definition = () => {
         </div>
       </div>
 
-      {/* Header row - hidden on small screens */}
+      {/* Header row */}
       <div className="mt-4">
         <div className="hidden md:grid grid-cols-3 gap-x-0 md:gap-x-1 px-3 py-2 rounded-md bg-accent text-accent-foreground">
           <div className="text-sm font-semibold">Endpoints</div>
@@ -127,13 +111,14 @@ const Definition = () => {
         </div>
       </div>
 
+      {/* Endpoints list */}
       <div className="mt-2 flex-1 overflow-auto">
-        {loading && <p className="text-gray-400 px-3">Loading endpoints...</p>}
-        {error && <p className="text-red-500 px-3">{error}</p>}
-        {!loading && !error && endpoints.length === 0 && (
+        {isLoading && <p className="text-gray-400 px-3">Loading endpoints...</p>}
+        {error && <p className="text-red-500 px-3">Failed to load endpoints</p>}
+        {!isLoading && !error && endpoints.length === 0 && (
           <p className="text-gray-400 px-3">No endpoints found.</p>
         )}
-        {!loading && !error && endpoints.length > 0 && (
+        {!isLoading && !error && endpoints.length > 0 && (
           <ul className="divide-y divide-border">
             {endpoints.map((ep: Endpoint) => (
               <li
