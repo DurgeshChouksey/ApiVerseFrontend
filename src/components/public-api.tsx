@@ -15,7 +15,7 @@ const PublicApi = () => {
 
   const { data, isLoading, error, refetch } = useGetPublicApisQuery(
     { page: currentPage, sort, filter: filter || "" },
-    { refetchOnMountOrArgChange: true }
+    { refetchOnMountOrArgChange: false }
   );
 
   // Derived data for rendering
@@ -27,11 +27,6 @@ const PublicApi = () => {
     setCurrentPage(1);
   }, [sort]);
 
-  // Optional: log query result safely
-  useEffect(() => {
-    console.log("Public API data:", data);
-    console.log("Loading:", isLoading, "Error:", error);
-  }, [data, isLoading, error]);
 
   if (isLoading) return <Loading />;
   if (error) return <p>Error loading APIs</p>;

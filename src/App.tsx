@@ -24,7 +24,8 @@ import { useGetUserProfileQuery } from './features/user/userApi';
 
 function App() {
 
-	const { data: userInfo, isLoading } = useGetUserProfileQuery(undefined);
+
+  const { data: userInfo, isLoading } = useGetUserProfileQuery(undefined);
 
 
   const isLoggedIn = !!userInfo?.user;

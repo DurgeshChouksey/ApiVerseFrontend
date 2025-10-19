@@ -14,7 +14,7 @@ const MyApi = () => {
   // RTK Query hook to fetch user's APIs
   const { data, isLoading, error, refetch } = useGetMyApisQuery(
     { page: currentPage, sort, filter: filter || "" }, // pass filter if needed
-    { refetchOnMountOrArgChange: true }      // force fetch on mount
+    { refetchOnMountOrArgChange: false }      // force fetch on mount
   );
 
   // Derived data

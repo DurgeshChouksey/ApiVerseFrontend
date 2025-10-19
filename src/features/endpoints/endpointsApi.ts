@@ -21,16 +21,7 @@ export const endpointsApi = createApi({
           : [{ type: "Endpoints", id: "LIST" }],
     }),
 
-    // 🔹 New mutation to test an endpoint
-    testEndpoint: builder.mutation<any, { apiId: string; endpointId: string; payload: any; headers: any }>({
-      query: ({ apiId, endpointId, payload, headers }) => ({
-        url: `/api/v1/apis/${apiId}/endpoints/test/${endpointId}`,
-        method: "POST",
-        data: payload,
-        headers: headers,
-      }),
-    }),
   }),
 });
 
-export const { useGetEndpointsQuery, useTestEndpointMutation } = endpointsApi;
+export const { useGetEndpointsQuery } = endpointsApi;

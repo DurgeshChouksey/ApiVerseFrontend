@@ -5,6 +5,8 @@ import { fetchWithAuth } from "@/lib/fetchWithAuth";
 import { HoverEffect } from "@/components/ui/card-hover-effect";
 import BasicPagination from "@/components/pagination";
 import { useGetMyApisQuery } from "@/features/apis/apisApi";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/redux/store";
 
 interface ProjectFormData {
   projectName: string;
@@ -22,9 +24,11 @@ const Studio = () => {
   const openForm = () => setIsFormOpen(true);
   const closeForm = () => setIsFormOpen(false);
 
+  const filter = useSelector((state: RootState) => state.search.filter);
+
   // RTK Query hook
   const { data, isLoading, error: queryError, refetch } = useGetMyApisQuery(
-    { page: currentPage, sort, filter: "" }, // replace filter if needed
+    { page: currentPage, sort, filter: filter || "" }, // replace filter if needed
     { refetchOnMountOrArgChange: true }
   );
 

@@ -15,6 +15,7 @@ export const apisApi = createApi({
         credentials: 'include',
       }),
       providesTags: [{ type: 'PublicApis' }],
+      keepUnusedDataFor: 120, // keep cached data for 2 minutes instead of 60 seconds
     }),
 
     // Fetch user's APIs

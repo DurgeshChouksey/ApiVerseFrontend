@@ -14,7 +14,7 @@ const SubscribedApi = () => {
   // RTK Query hook to fetch subscribed APIs
   const { data, isLoading, error } = useGetSubscribedApisQuery(
     { page: currentPage, sort, filter: filter || "" },
-    { refetchOnMountOrArgChange: true }
+    { refetchOnMountOrArgChange: false }
   );
 
   const apis = data?.apis || [];

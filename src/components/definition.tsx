@@ -28,7 +28,7 @@ const Definition = () => {
   // ADDED: State to hold the endpoint currently being edited
   const [editingEndpoint, setEditingEndpoint] = useState<Endpoint | null>(null);
 
-  const filter = useSelector<RootState>((state) => state.endpoints.filter);
+  const filter = useSelector<RootState>((state) => state.search.filter);
 
   useEffect(() => {
     async function fetchEndpoints() {

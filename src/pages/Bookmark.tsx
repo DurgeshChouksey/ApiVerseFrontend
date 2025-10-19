@@ -10,7 +10,7 @@ const Bookmark = () => {
 
   // RTK Query hook to fetch bookmarked APIs
   const { data, isLoading, error } = useGetBookmarkedApisQuery({filter: filter || ""}, {
-    refetchOnMountOrArgChange: true, // ensures fetch on mount
+    refetchOnMountOrArgChange: false, // ensures fetch on mount
   });
 
   const bookmarkedApi = data?.bookmarks || [];
