@@ -1,7 +1,8 @@
 import { fetchBaseQuery } from '@reduxjs/toolkit/query';
 import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
-const BASE_URL = "http://localhost:8787";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+// const BASE_URL = "http://localhost:8787";
 
 // Normal base query — attaches credentials (cookies)
 const baseQuery = fetchBaseQuery({
