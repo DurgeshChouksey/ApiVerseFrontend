@@ -1,23 +1,28 @@
-import type { RootState } from "@/redux/store";
-import { useSelector } from "react-redux";
+import { type ReactNode } from "react";
+import { useGetUserProfileQuery } from "@/features/user/userApi";
 import NotFound from "./NotFound";
 import Loading from "@/pages/Loading";
 
-const ProtectedRoute = ({ children }: any) => {
-	const { user, loading } = useSelector((state: RootState) => state.user);
+interface ProtectedRouteProps {
+  children: ReactNode;
+}
 
-	if (loading) {
-		// While checking auth → show loader instead of NotFound
-		return <Loading />;
-	}
+const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
+  // Call RTK Query to check auth
+  const { data: userInfo, isLoading, error } = useGetUserProfileQuery(undefined);
 
-	if (!user) {
-		// Auth check complete → user not found
-		return <NotFound />;
-	}
+  if (isLoading) {
+    // While query is loading, show loader
+    return <Loading />;
+  }
 
-	// User authenticated → render the page
-	return <>{children}</>;
+  if (error || !userInfo?.user) {
+    // If API fails or user not authenticated, show NotFound or redirect
+    return <NotFound />;
+  }
+
+  // User authenticated → render the protected page
+  return <>{children}</>;
 };
 
 export default ProtectedRoute;

@@ -1,41 +1,41 @@
-import { myApis } from "@/features/apis/apisSlice";
-import Loading from "@/pages/Loading";
-import type { AppDispatch, RootState } from "@/redux/store";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState, useEffect } from "react";
 import BasicPagination from "./pagination";
 import { HoverEffect } from "./ui/card-hover-effect";
+import Loading from "@/pages/Loading";
+import { useGetMyApisQuery } from "@/features/apis/apisApi";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/redux/store";
 
 const MyApi = () => {
-  const [apis, setApis] = useState([]);
-  const [totalPages, setTotalPages] = useState(1);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [loading, setLoading] = useState(false);
   const [sort, setSort] = useState("views");
+  const [currentPage, setCurrentPage] = useState(1);
+  const filter = useSelector((state: RootState) => state.search.filter);
 
-  const filter = useSelector((state: RootState) => state.apis.filter);
-  const dispatch = useDispatch<AppDispatch>();
+  // RTK Query hook to fetch user's APIs
+  const { data, isLoading, error, refetch } = useGetMyApisQuery(
+    { page: currentPage, sort, filter: filter || "" }, // pass filter if needed
+    { refetchOnMountOrArgChange: false }      // force fetch on mount
+  );
 
-  async function fetchMyApis(page = 1) {
-    setLoading(true);
-    const { payload } = await dispatch(myApis({ page, sort, filter }));
-    setApis(payload.apis || []);
-    setTotalPages(Math.ceil(payload.total / payload.limit));
-    setCurrentPage(payload.page);
-    setLoading(false);
-  }
+  // Derived data
+  const apis = data?.apis || [];
+  const totalPages = data ? Math.ceil(data.total / data.limit) : 1;
 
+  // Reset page when sort changes
   useEffect(() => {
-    fetchMyApis();
-  }, [filter, sort]);
+    setCurrentPage(1);
+  }, [sort]);
 
-  if (loading) {
-    return <Loading />;
-  }
+  if (isLoading) return <Loading />;
+  if (error) return <p>Error loading APIs</p>;
 
+  // Event handlers
   const handleSortChange = (e: any) => {
-    setSort(e.target.value);
-    fetchMyApis(1);
+    setSort(e.target.value); // RTK Query automatically refetches
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page); // triggers query with new page
   };
 
   return (
@@ -62,15 +62,15 @@ const MyApi = () => {
         </select>
       </div>
 
-      {/* Cards */}
-    <HoverEffect apis={apis} />
+      {/* API Cards */}
+      <HoverEffect apis={apis} />
 
-
+      {/* Pagination */}
       <BasicPagination
         totalPages={totalPages}
         currentPage={currentPage}
         siblingsCount={2}
-        onPageChange={(page) => fetchMyApis(page)}
+        onPageChange={handlePageChange}
         showDemo={false}
       />
     </div>

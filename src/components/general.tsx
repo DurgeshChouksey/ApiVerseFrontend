@@ -6,108 +6,95 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Eye } from 'lucide-react';
+import { useGetApiByIdQuery } from "@/features/apis/apisApi";
 
 
 const General = () => {
-	const [api, setApi] = useState<any>(null);
-	const [loading, setLoading] = useState(true);
-	const { apiId } = useParams();
-	const dispatch = useDispatch<AppDispatch>();
 	const [formData, setFormData] = useState({
-		name: "",
-		description: "",
-		logo: "https://raw.githubusercontent.com/DurgeshChouksey/ApiVersePublicUtilities/main/public/temp-api-logo.png",
-		baseUrl: "",
-		category: "",
-		visibility: "public",
-		requiresApiKey: "false",
-		providerAuthType: "",
-		providerAuthLocation: "",
-		providerAuthField: "",
-		providerAuthKey: "",
-	});
-	const [successMessage, setSuccessMessage] = useState("");
-	const [errorMessage, setErrorMessage] = useState("");
-	const [showAuthKey, setShowAuthKey] = useState(false);
+    name: "",
+    description: "",
+    logo: "https://raw.githubusercontent.com/DurgeshChouksey/ApiVersePublicUtilities/main/public/temp-api-logo.png",
+    baseUrl: "",
+    category: "",
+    visibility: "public",
+    requiresApiKey: "false",
+    providerAuthType: "",
+    providerAuthLocation: "",
+    providerAuthField: "",
+    providerAuthKey: "",
+  });
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [showAuthKey, setShowAuthKey] = useState(false);
 
-	async function fetchApi() {
-		setLoading(true);
-		const { payload } = await dispatch(getApi({ apiId }));
-		setApi(payload);
-		// ✅ Set form values using fetched API data
-		setFormData({
-			name: payload.name || "",
-			description: payload.description || "",
-			logo:
-				payload.logo ||
-				"https://raw.githubusercontent.com/DurgeshChouksey/ApiVersePublicUtilities/main/public/temp-api-logo.png",
-			baseUrl: payload.baseUrl || "",
-			category: payload.category || "",
-			visibility: payload.visibility || "public",
-			requiresApiKey: payload.requiresApiKey ? "true" : "false",
-			providerAuthType: payload.providerAuthType || "",
-			providerAuthLocation: payload.providerAuthLocation || "",
-			providerAuthField: payload.providerAuthField || "",
-			providerAuthKey: payload.providerAuthKey || "",
-		});
-		setLoading(false);
-	}
+  const { apiId } = useParams();
 
-	useEffect(() => {
-		fetchApi();
-	}, []);
+  // RTK Query hook to fetch API by ID
+  const { data: api, isLoading, error } = useGetApiByIdQuery(apiId!);
 
-	if (loading) {
-		<Loading />;
-	}
+  // Populate formData once API data is loaded
+  useEffect(() => {
+    if (!api) return;
+    setFormData({
+      name: api.name || "",
+      description: api.description || "",
+      logo: api.logo || "https://raw.githubusercontent.com/DurgeshChouksey/ApiVersePublicUtilities/main/public/temp-api-logo.png",
+      baseUrl: api.baseUrl || "",
+      category: api.category || "",
+      visibility: api.visibility || "public",
+      requiresApiKey: api.requiresApiKey ? "true" : "false",
+      providerAuthType: api.providerAuthType || "",
+      providerAuthLocation: api.providerAuthLocation || "",
+      providerAuthField: api.providerAuthField || "",
+      providerAuthKey: api.providerAuthKey || "",
+    });
+  }, [api]);
 
-	const handleChange = (
-		e: React.ChangeEvent<
-			HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-		>
-	) => {
-		const { name, value } = e.target;
-		setFormData((prev) => ({
-			...prev,
-			[name]: value,
-		}));
-	};
+  if (isLoading) return <Loading />;
 
-	const handleUpdate = async () => {
-		try {
-			const res = await fetchWithAuth(`/api/v1/apis/${apiId}`, {
-				method: "PATCH",
-				data: {
-					...formData,
-					requiresApiKey: formData.requiresApiKey === "true",
-				},
-			});
-			setErrorMessage("");
-			setSuccessMessage(res?.message);
-		} catch (error: any) {
-			setSuccessMessage("");
-			setErrorMessage(error?.response?.data?.title);
-		}
-	};
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
-	const handleDiscard = () => {
-		if (!api) return;
-		setFormData({
-			name: api.name || "",
-			description: api.description || "",
-			logo:
-				api.logo ||
-				"https://raw.githubusercontent.com/DurgeshChouksey/ApiVersePublicUtilities/main/public/temp-api-logo.png",
-			baseUrl: api.baseUrl || "",
-			category: api.category || "",
-			visibility: api.visibility || "public",
-			requiresApiKey: api.requiresApiKey ? "true" : "false",
-			providerAuthType: api.providerAuthType || "",
-			providerAuthLocation: api.providerAuthLocation || "",
-			providerAuthField: api.providerAuthField || "",
-			providerAuthKey: api.providerAuthKey || "",
-		});
-	};
+  const handleUpdate = async () => {
+    try {
+      const res = await fetchWithAuth(`/api/v1/apis/${apiId}`, {
+        method: "PATCH",
+        data: {
+          ...formData,
+          requiresApiKey: formData.requiresApiKey === "true",
+        },
+      });
+      setErrorMessage("");
+      setSuccessMessage(res?.message);
+    } catch (error: any) {
+      setSuccessMessage("");
+      setErrorMessage(error?.response?.data?.title);
+    }
+  };
+
+  const handleDiscard = () => {
+    if (!api) return;
+    setFormData({
+      name: api.name || "",
+      description: api.description || "",
+      logo: api.logo || "https://raw.githubusercontent.com/DurgeshChouksey/ApiVersePublicUtilities/main/public/temp-api-logo.png",
+      baseUrl: api.baseUrl || "",
+      category: api.category || "",
+      visibility: api.visibility || "public",
+      requiresApiKey: api.requiresApiKey ? "true" : "false",
+      providerAuthType: api.providerAuthType || "",
+      providerAuthLocation: api.providerAuthLocation || "",
+      providerAuthField: api.providerAuthField || "",
+      providerAuthKey: api.providerAuthKey || "",
+    });
+  };
 
 	return (
 		<div className="border rounded-md">

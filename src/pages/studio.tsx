@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 import AddProjectForm from "@/components/add-project-form";
 import SearchBar from "@/components/search-bar";
 import { fetchWithAuth } from "@/lib/fetchWithAuth";
-import { useDispatch, useSelector } from "react-redux";
-import type { AppDispatch, RootState } from "@/redux/store";
-import { myApis } from "@/features/apis/apisSlice";
 import { HoverEffect } from "@/components/ui/card-hover-effect";
 import BasicPagination from "@/components/pagination";
+import { useGetMyApisQuery } from "@/features/apis/apisApi";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/redux/store";
 
 interface ProjectFormData {
   projectName: string;
@@ -15,48 +15,30 @@ interface ProjectFormData {
   team: string;
 }
 
-interface ApiData {
-  id: string;
-  name: string;
-  description: string;
-  category: string;
-  owner: {
-    username: string;
-  };
-  updatedAt: string;
-  apiLogs: Array<{
-    totalCalls: number;
-    totalErrors: number;
-    averageLatency: number;
-  }>;
-  isBookmarked: boolean;
-}
-
 const Studio = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [apis, setApis] = useState<ApiData[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
+  const [sort, setSort] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   const openForm = () => setIsFormOpen(true);
   const closeForm = () => setIsFormOpen(false);
 
-  const filter = useSelector((state: RootState) => state.apis.filter);
-  const dispatch = useDispatch<AppDispatch>();
+  const filter = useSelector((state: RootState) => state.search.filter);
 
+  // RTK Query hook
+  const { data, isLoading, error: queryError, refetch } = useGetMyApisQuery(
+    { page: currentPage, sort, filter: filter || "" }, // replace filter if needed
+    { refetchOnMountOrArgChange: true }
+  );
 
-  async function fetchMyApis(page = 1) {
-    setLoading(true);
-    const { payload } = await dispatch(
-      myApis({ page, sort: "", filter: filter })
-    );
-    setApis(payload.apis);
-    setTotalPages(Math.ceil(payload.total / payload.limit));
-    setCurrentPage(payload.page);
-    setLoading(false);
-  }
+  const apis = data?.apis || [];
+  const totalPages = data ? Math.ceil(data.total / data.limit) : 1;
+
+  // Optional: log or handle query error
+  useEffect(() => {
+    if (queryError) setError("Failed to load your APIs");
+  }, [queryError]);
 
   const handleAddProject = async (newProject: ProjectFormData) => {
     try {
@@ -71,10 +53,9 @@ const Studio = () => {
         },
       });
 
-      // Fetch updated APIs list
-      await fetchMyApis();
+      // Refetch updated API list
+      refetch();
 
-      // Close the form on success
       closeForm();
     } catch (err: any) {
       console.error("Error creating API project:", err);
@@ -82,10 +63,14 @@ const Studio = () => {
     }
   };
 
-  // Refetch APIs when filter changes
-  useEffect(() => {
-    fetchMyApis();
-  }, [filter]);
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handleSortChange = (e: any) => {
+    setSort(e.target.value);
+    setCurrentPage(1);
+  };
 
   return (
     <div className="bg-background h-screen text-foreground overflow-hidden">
@@ -107,7 +92,7 @@ const Studio = () => {
         </div>
 
         <div className="mt-8 sm:mt-12">
-          {loading ? (
+          {isLoading ? (
             <div className="col-span-full text-center px-4 sm:px-0">
               <p className="text-base sm:text-lg font-semibold text-foreground">
                 Loading your API Projects...
@@ -119,7 +104,7 @@ const Studio = () => {
                 {error}
               </p>
               <button
-                onClick={fetchMyApis}
+                onClick={refetch}
                 className="mt-4 sm:mt-6 px-4 py-2 border border-border bg-background hover:bg-accent hover:text-accent-foreground rounded-md transition-colors text-sm sm:text-base"
               >
                 Retry
@@ -150,7 +135,7 @@ const Studio = () => {
           totalPages={totalPages}
           currentPage={currentPage}
           siblingsCount={2}
-          onPageChange={(page) => fetchMyApis(page)}
+          onPageChange={handlePageChange}
           showDemo={false}
         />
       </div>

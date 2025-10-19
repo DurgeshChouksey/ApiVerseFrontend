@@ -22,7 +22,8 @@ const Definition = () => {
   const [error, setError] = useState<string | null>(null);
   const [showAddForm, setShowAddForm] = useState<boolean>(false);
   const [editingEndpoint, setEditingEndpoint] = useState<Endpoint | null>(null);
-  const filter = useSelector<RootState>((state) => state.endpoints.filter);
+
+  const filter = useSelector<RootState>((state) => state.search.filter);
 
   useEffect(() => {
     async function fetchEndpoints() {

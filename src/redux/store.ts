@@ -1,21 +1,37 @@
-import { configureStore } from '@reduxjs/toolkit'
-import userSlice from '../features/user/userSlice'
-import apisSlice from '../features/apis/apisSlice'
-import apiSlice from '../features/apis/apiSlice'
-import endpointSlice from '../features/endpoints/endpointSlice'
+import { configureStore } from '@reduxjs/toolkit';
+
+// Existing slices
 import endpointTestSlice from "../features/endpoints/endpointTestSlice";
-import subscriptionReducer from "@/features/subscription/subscriptionInfoSlice";
+import searchReducer from '@/features/search/searchSlice';
+
+// RTK Query API slices
+import { userApi } from '../features/user/userApi';
+import { apisApi } from '../features/apis/apisApi';
+import { endpointsApi } from "@/features/endpoints/endpointsApi";
+import { subscriptionApi } from "@/features/subscription/subscriptionApi";
+import { docsApi } from "@/features/docs/docsApi";
 
 export const store = configureStore({
   reducer: {
-    user: userSlice,
-    apis: apisSlice,
-    api: apiSlice,
-    endpoints: endpointSlice,
+    // Existing slices
+    search: searchReducer,
     endpointTest: endpointTestSlice,
-    subscription: subscriptionReducer,
-  },
-})
 
-export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
+    // RTK Query reducers
+    [userApi.reducerPath]: userApi.reducer,
+    [apisApi.reducerPath]: apisApi.reducer,
+    [endpointsApi.reducerPath]: endpointsApi.reducer,
+    [subscriptionApi.reducerPath]: subscriptionApi.reducer,
+    [docsApi.reducerPath]: docsApi.reducer
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware()
+      .concat(userApi.middleware)
+      .concat(apisApi.middleware)
+      .concat(endpointsApi.middleware)
+      .concat(subscriptionApi.middleware)
+      .concat(docsApi.middleware),
+});
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 
-
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -11,11 +10,14 @@ import { Card, CardContent } from '@/components/ui/card';
 import { motion } from 'framer-motion';
 import Shuffle from '@/components/ui/shadcn-io/shuffle';
 import { useDispatch } from 'react-redux';
-import { loginUser, googleLoginUser } from '@/features/user/userSlice';
 import type { AppDispatch } from '@/redux/store';
+import { useLoginUserMutation } from '@/features/user/userApi';
 
 
 export default function SignIn() {
+
+
+    const [loginUser] = useLoginUserMutation();
 
     const navigate = useNavigate();
 
@@ -25,32 +27,20 @@ export default function SignIn() {
     const [errorMessage, setErrorMessage] = useState("");
 
 
-
-    const dispatch = useDispatch<AppDispatch>();
-
-
     async function signinHandler() {
-            const {payload} = await dispatch(loginUser({
-              method: 'POST',
-              data: {
-                identifier,
-                password
-              }
-            }));
+      const payload = await loginUser({ identifier, password }).unwrap();
 
-            if(payload?.user) {
-              setErrorMessage("");
-              setSuccessMessage(payload.message);
-              setTimeout(() => {
-                  navigate('/public')
-              }, 1000);
-            }
+      if(payload?.user) {
+        setErrorMessage("");
+        setSuccessMessage(payload.message);
+        setTimeout(() => {
+            navigate('/public')
+        }, 1000);
+      }
 
-            if(payload?.status != 200) {
-              setErrorMessage(payload?.response?.data?.message);
-            }
-
-
+      if(payload?.status != 200) {
+        setErrorMessage(payload?.response?.data?.message);
+      }
     }
 
     async function handleGoogleSignin() {
