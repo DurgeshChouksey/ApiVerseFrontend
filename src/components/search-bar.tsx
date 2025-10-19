@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { setFilter } from "@/features/apis/apisSlice";
+import { setFilter } from '@/features/search/searchSlice';
 import { Search, Command } from "lucide-react";
 import type { AppDispatch } from "@/redux/store";
 
@@ -13,7 +13,7 @@ const SearchBar = () => {
   // 🔹 Debounce filter update
   useEffect(() => {
     const timeout = setTimeout(() => {
-        dispatch(setFilter(query));
+      dispatch(setFilter(query));
     }, 300);
     return () => clearTimeout(timeout);
   }, [query]);

@@ -2,50 +2,53 @@ import EndpointInputForm from "@/components/endpoint-input-form";
 import Response from "@/components/endpoint-response";
 import Endpoints from "@/components/endpoints";
 import Sidebar from "@/components/sidebar";
-import type { RootState } from "@/redux/store";
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
+import { useGetEndpointsQuery, useTestEndpointMutation } from "@/features/endpoints/endpointsApi";
 
 const ApiPlayground = () => {
-  const { pathname } = useLocation();
-  const { apiId, endpointId } : any = useParams();
-  const [endpointData, setEndpointData] = useState<any>(null);
+	const { pathname } = useLocation();
+	const { apiId, endpointId }: any = useParams();
+	const [endpointData, setEndpointData] = useState<any>(null);
 
-  const endpoints = useSelector(
-    (state: RootState) => state.endpoints.data
-  ) as any[];
+	const { data: endpoints, isLoading, error } = useGetEndpointsQuery({ apiId });
 
-  // Fetch endpoint from redux data
-  useEffect(() => {
+	useEffect(() => {
     if (endpoints && endpointId) {
       const endpoint = endpoints.find((ep: any) => ep.id === endpointId);
-      if (endpoint) setEndpointData(endpoint);
-    }
-  }, [endpointId, endpoints]);
+			if (endpoint) setEndpointData(endpoint);
+		}
+	}, [endpointId, endpoints]);
 
-  return (
-    <div className="md:mt-10">
-      {/* left */}
-      <Sidebar />
+  const [testEndpoint, { data: testResponse, isLoading: testLoading, error: testError }] = useTestEndpointMutation();
+
+	if (isLoading) return <p>Loading endpoints...</p>;
+	if (error) return <p>Error loading endpoints</p>;
 
 
-      {/* right */}
-      <div className="md:ml-[250px] p-6 mt-15">
+	return (
+		<div className="md:mt-10">
+			{/* left */}
+			<Sidebar />
 
-        {/* showing endpoints on mobile view */}
-        <div className="md:hidden">
-          <Endpoints apiId={apiId} pathname={pathname}></Endpoints>
-        </div>
+			{/* right */}
+			<div className="md:ml-[250px] p-6 mt-15">
+				{/* showing endpoints on mobile view */}
+				<div className="md:hidden">
+					<Endpoints apiId={apiId} pathname={pathname}></Endpoints>
+				</div>
 
-        {/* Endpoint inputs section */}
-        <EndpointInputForm apiId={apiId} endpointData={endpointData} />
+				{/* Endpoint inputs section */}
+				<EndpointInputForm
+          apiId={apiId}
+          endpointData={endpointData}
+        />
 
-        {/* Response section */}
-        <Response  />
-      </div>
-    </div>
-  );
+				{/* Response section */}
+				<Response />
+			</div>
+		</div>
+	);
 };
 
 export default ApiPlayground;

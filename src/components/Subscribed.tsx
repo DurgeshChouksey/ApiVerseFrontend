@@ -1,43 +1,36 @@
-
-import { subscribedApis } from "@/features/apis/apisSlice";
-import Loading from "@/pages/Loading";
-import type { AppDispatch, RootState } from "@/redux/store";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
 import BasicPagination from "./pagination";
 import { HoverEffect } from "./ui/card-hover-effect";
+import Loading from "@/pages/Loading";
+import { useGetSubscribedApisQuery } from "@/features/apis/apisApi";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/redux/store";
 
 const SubscribedApi = () => {
-  const [apis, setApis] = useState([]);
-  const [totalPages, setTotalPages] = useState(1);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [loading, setLoading] = useState(false);
   const [sort, setSort] = useState("views");
+  const [currentPage, setCurrentPage] = useState(1);
+  const filter = useSelector((state: RootState) => state.search.filter);
 
-  const filter = useSelector((state: RootState) => state.apis.filter);
-  const dispatch = useDispatch<AppDispatch>();
+  // RTK Query hook to fetch subscribed APIs
+  const { data, isLoading, error } = useGetSubscribedApisQuery(
+    { page: currentPage, sort, filter: filter || "" },
+    { refetchOnMountOrArgChange: true }
+  );
 
-  async function fetchSubscribedApis(page = 1) {
-    setLoading(true);
-    const { payload } = await dispatch(subscribedApis({ page, sort, filter }));
-    setApis(payload.apis || []);
-    setTotalPages(Math.ceil(payload.total / payload.limit));
-    setCurrentPage(payload.page);
-    setLoading(false);
-  }
-
-  useEffect(() => {
-    fetchSubscribedApis();
-  }, [filter, sort]);
-
-  if (loading) {
-    return <Loading />;
-  }
+  const apis = data?.apis || [];
+  const totalPages = data ? Math.ceil(data.total / data.limit) : 1;
 
   const handleSortChange = (e: any) => {
     setSort(e.target.value);
-    fetchSubscribedApis(1);
+    setCurrentPage(1); // reset page when sort changes
   };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  if (isLoading) return <Loading />;
+  if (error) return <p>Error loading subscribed APIs</p>;
 
   return (
     <div className="md:ml-[18%] p-6">
@@ -66,11 +59,12 @@ const SubscribedApi = () => {
       {/* Cards */}
       <HoverEffect apis={apis} />
 
+      {/* Pagination */}
       <BasicPagination
         totalPages={totalPages}
         currentPage={currentPage}
         siblingsCount={2}
-        onPageChange={(page) => fetchSubscribedApis(page)}
+        onPageChange={handlePageChange}
         showDemo={false}
       />
     </div>

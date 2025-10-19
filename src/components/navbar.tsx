@@ -90,7 +90,8 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn }) => {
 				)}
 				{isLoggedIn &&
 					currentPage !== "/public" &&
-					currentPage !== "/workspace" && (
+					currentPage !== "/workspace" &&
+					currentPage !== "/bookmarks" && (
 						<>
 							<ModeToggle></ModeToggle>
 							<Button onClick={() => navigate("/public")}>API Hub</Button>
@@ -104,7 +105,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn }) => {
 						</>
 					)}
 				{isLoggedIn &&
-					(currentPage === "/public" || currentPage === "/workspace") && (
+					(currentPage === "/public" || currentPage === "/workspace" || currentPage === "/bookmarks") && (
 						<>
 							<ModeToggle></ModeToggle>
 							<SearchBar />

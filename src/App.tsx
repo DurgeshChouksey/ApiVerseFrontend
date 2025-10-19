@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Routes, Route } from "react-router-dom";
 import Signup from "./pages/Signup";
 import SignIn from "./pages/SignIn";
@@ -11,8 +9,6 @@ import PublicApi from "./components/public-api";
 import Navbar from "./components/navbar";
 import ProtectedRoute from "./components/protected-route";
 import NotFound from "./components/NotFound";
-import { checkAuth } from "./features/user/userSlice";
-import { type RootState, type AppDispatch } from "@/redux/store";
 import Workspace from "./pages/Workspace";
 import AboutUs from "./pages/About";
 import Bookmark from "./pages/Bookmark";
@@ -24,21 +20,16 @@ import Profile from "./pages/Profile";
 import ApiOverview from "./pages/ApiOverview";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import { useGetUserProfileQuery } from './features/user/userApi';
 
 function App() {
 
-	const dispatch = useDispatch<AppDispatch>();
-  const userInfo : any = useSelector<RootState>(state => state.user);
-  let isLoggedIn = !!userInfo?.user;
+	const { data: userInfo, isLoading } = useGetUserProfileQuery(undefined);
 
-  async function auth() {
-	await dispatch(checkAuth());
-  }
 
-	useEffect( () => {
-		auth();
-	}, []);
+  const isLoggedIn = !!userInfo?.user;
 
+  if (isLoading) return <Loading />;
 
   // route list
 	const routeList = [
