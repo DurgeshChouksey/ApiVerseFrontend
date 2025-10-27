@@ -27,7 +27,6 @@ function App() {
 
   const { data: userInfo, isLoading } = useGetUserProfileQuery(undefined);
 
-
   const isLoggedIn = !!userInfo?.user;
 
   if (isLoading) return <Loading />;

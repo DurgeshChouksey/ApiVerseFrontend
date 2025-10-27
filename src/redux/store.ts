@@ -10,6 +10,7 @@ import { apisApi } from '../features/apis/apisApi';
 import { endpointsApi } from "@/features/endpoints/endpointsApi";
 import { subscriptionApi } from "@/features/subscription/subscriptionApi";
 import { docsApi } from "@/features/docs/docsApi";
+import { analyticsApi } from "@/features/analytics/analyticsApi";
 
 export const store = configureStore({
   reducer: {
@@ -22,7 +23,8 @@ export const store = configureStore({
     [apisApi.reducerPath]: apisApi.reducer,
     [endpointsApi.reducerPath]: endpointsApi.reducer,
     [subscriptionApi.reducerPath]: subscriptionApi.reducer,
-    [docsApi.reducerPath]: docsApi.reducer
+    [docsApi.reducerPath]: docsApi.reducer,
+    [analyticsApi.reducerPath]: analyticsApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -30,7 +32,8 @@ export const store = configureStore({
       .concat(apisApi.middleware)
       .concat(endpointsApi.middleware)
       .concat(subscriptionApi.middleware)
-      .concat(docsApi.middleware),
+      .concat(docsApi.middleware)
+      .concat(analyticsApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

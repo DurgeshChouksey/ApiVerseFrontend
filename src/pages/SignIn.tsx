@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 
 import { Button } from '@/components/ui/button';
@@ -9,13 +9,10 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { motion } from 'framer-motion';
 import Shuffle from '@/components/ui/shadcn-io/shuffle';
-import { useDispatch } from 'react-redux';
-import type { AppDispatch } from '@/redux/store';
 import { useLoginUserMutation } from '@/features/user/userApi';
 
 
 export default function SignIn() {
-
 
     const [loginUser] = useLoginUserMutation();
 
@@ -25,7 +22,6 @@ export default function SignIn() {
     const [password, setPassword] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
-
 
     async function signinHandler() {
       const payload = await loginUser({ identifier, password }).unwrap();

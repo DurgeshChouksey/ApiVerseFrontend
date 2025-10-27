@@ -5,10 +5,9 @@ import { Button } from "./ui/button";
 import AnimatedBtn1 from "./mvpblocks/animated-btn1";
 import { ModeToggle } from "./mode-toggle";
 import Shuffle from "./ui/shadcn-io/shuffle";
-import { useDispatch } from "react-redux";
-import type { AppDispatch } from "@/redux/store";
-import { logoutUser } from "@/features/user/userSlice";
 import SearchBar from "../components/search-bar";
+import { useLogoutUserMutation } from "@/features/user/userApi";
+
 
 interface NavbarProps {
 	isLoggedIn: boolean;
@@ -21,11 +20,10 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn }) => {
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
 	// logout logic
-	const dispatch = useDispatch<AppDispatch>();
+	const [logoutUser] = useLogoutUserMutation();
 	const handleLogout = async () => {
-		const res = await dispatch(logoutUser());
-		console.log(res?.payload);
-		navigate("/signin");
+		await logoutUser(undefined);
+		setTimeout(() => navigate('/signin'), 2000)
 	};
 
 	const Logo = () => (

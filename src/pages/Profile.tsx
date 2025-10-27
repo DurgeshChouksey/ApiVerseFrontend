@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import Loading from "./Loading";
 import { fetchWithAuth } from "@/lib/fetchWithAuth";
 import { useNavigate } from "react-router-dom";
+import { useGetMeQuery } from "@/features/user/userApi";
 
 const Profile = () => {
-	const [user, setUser] = useState<any>(null);
-	const [loading, setLoading] = useState(true);
 	const [email, setEmail] = useState("");
 	const [bio, setBio] = useState("");
 	const [successMessage, setSuccessMessage] = useState("");
@@ -16,13 +15,7 @@ const Profile = () => {
 	const bioRef = React.useRef<HTMLTextAreaElement>(null);
 	const navigate = useNavigate();
 
-	async function fetchUserProfile() {
-		setLoading(true);
-		const response = await fetchWithAuth("/api/v1/user/me");
-		setUser(response);
-		setBio(response.bio || "");
-		setLoading(false);
-	}
+	const { data: user, isLoading, refetch } = useGetMeQuery(undefined);
 
 	const handleAddEmail = async () => {
 		if (!email.trim()) return alert("Please enter a valid email.");
@@ -57,7 +50,7 @@ const Profile = () => {
 		});
 
 		setBioDisabled(!isBioDisabled);
-		fetchUserProfile(); // refresh user data
+		refetch(); // refresh user data
 	};
 
 	const handleChangePassword = async () => {
@@ -71,11 +64,13 @@ const Profile = () => {
 			setSuccessMessage("");
 			setErrorMessage(error?.response?.data.message);
 		}
-	}
+	};
 
 	useEffect(() => {
-		fetchUserProfile();
-	}, []);
+		if (user) {
+			setBio(user.bio || "");
+		}
+	}, [user]);
 
 	useEffect(() => {
 		if (!isBioDisabled) {
@@ -84,7 +79,7 @@ const Profile = () => {
 		}
 	}, [isBioDisabled]);
 
-	if (loading) return <Loading />;
+	if (isLoading) return <Loading />;
 
 	if (!user) return <div className="text-center py-10">No user data found</div>;
 
@@ -144,7 +139,9 @@ const Profile = () => {
 							</button>
 							<div>
 								{successEmailMessage && (
-									<p className="text-xl text-green-500">{successEmailMessage}</p>
+									<p className="text-xl text-green-500">
+										{successEmailMessage}
+									</p>
 								)}
 								{errorEmailMessage && (
 									<p className="text-xl text-red-500">{errorEmailMessage}</p>

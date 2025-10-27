@@ -34,7 +34,7 @@ const StudioSidebar = () => {
       </aside>
 
       {/* Mobile Dropdown */}
-      <div className="block md:hidden mt-18 w-fit px-6">
+      <div className="block md:hidden mt-18 w-fit px-2">
         <select
           value={
             links.find((link) => pathname.startsWith(link.path))?.path || ""
@@ -43,7 +43,7 @@ const StudioSidebar = () => {
             const selectedPath = e.target.value;
             if (selectedPath) navigate(selectedPath);
           }}
-          className="outline-none rounded-md dark:border-gray-700 bg-gray-300 dark:bg-gray-700 text-black dark:text-white py-2 px-3 w-full"
+          className="outline-none rounded-md dark:border-gray-700 bg-gray-300 dark:bg-[#202020] text-black dark:text-white py-2 px-3 w-full"
         >
           <option value="" disabled>
             Select Section

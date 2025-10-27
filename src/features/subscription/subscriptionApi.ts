@@ -8,10 +8,7 @@ export const subscriptionApi = createApi({
   tagTypes: ["Subscription"],
   endpoints: (builder) => ({
     // ✅ Check subscription
-    checkSubscription: builder.query<
-      { isSubscribed: boolean; isOwner: boolean; apiKey: string | null },
-      string
-    >({
+    checkSubscription: builder.query({
       query: (apiId) => `/api/v1/apis/${apiId}/subscribed`,
       providesTags: ["Subscription"],
     }),
@@ -21,7 +18,7 @@ export const subscriptionApi = createApi({
       query: ({ apiId, plan }) => ({
         url: `/api/v1/apis/${apiId}/subscribe`,
         method: "POST",
-        data: { plan },
+        body: { plan },
       }),
       invalidatesTags: ["Subscription"],
     }),

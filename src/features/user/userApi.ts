@@ -15,6 +15,13 @@ export const userApi = createApi({
       }),
     }),
 
+    getMe: builder.query({
+      query: () => ({
+        url: '/api/v1/user/me',
+        credentials: 'include',
+      }),
+    }),
+
     loginUser: builder.mutation<any, { identifier: string; password: string }>({
       query: (credentials) => ({
         url: '/api/v1/auth/login',
@@ -37,4 +44,4 @@ export const userApi = createApi({
   }),
 });
 
-export const { useGetUserProfileQuery, useLogoutUserMutation, useLoginUserMutation } = userApi;
+export const { useGetUserProfileQuery, useGetMeQuery ,useLogoutUserMutation, useLoginUserMutation } = userApi;

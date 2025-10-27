@@ -13,12 +13,12 @@ const UpdateApi = () => {
       <StudioSidebar />
 
       {/* Main content changes based on route */}
-      <div className="flex-1 px-6 overflow-y-auto mt-2 md:mt-16  md:ml-[200px]">
+      <div className="flex-1 overflow-y-auto mt-2 md:mt-16  md:ml-[200px]">
 
         <Routes>
           <Route path="publish/*" element={<HubListing />} />
           <Route path="analytics/*" element={<Analytics />} />
-          <Route path="manage/*" element={<Settings />} />
+          <Route path="settings/*" element={<Settings />} />
         </Routes>
       </div>
     </div>
