@@ -10,25 +10,6 @@ type Field = {
 
 const FIELD_TYPES = ["string", "number", "boolean", "array", "object"];
 
-type AddEndpointFormProps = {
-  onCancel?: () => void;
-  onSubmit?: (data: {
-    name: string;
-    description: string;
-    method: string;
-    path: string;
-    headers?: Field[];
-    query?: Field[];
-    body?: Field[];
-  }) => void;
-  initialData?: {
-    name: string;
-    description: string;
-    method: string;
-    path: string;
-  } | null;
-};
-
 const HTTP_METHODS = [
   "GET",
   "POST",
@@ -39,8 +20,27 @@ const HTTP_METHODS = [
   "OPTIONS",
 ];
 
-// --- BodyForm component ---
-const BodyForm: React.FC<{
+type AddEndpointFormProps = {
+  onCancel?: () => void;
+  onSubmit?: (data: {
+    name: string;
+    description: string;
+    method: string;
+    path: string;
+    headers?: Field[];
+    query?: Field[];
+    body?: Field[] | string;
+  }) => void;
+  initialData?: {
+    name: string;
+    description: string;
+    method: string;
+    path: string;
+  } | null;
+};
+
+// --- Table Component for Headers/Query ---
+const FieldTable: React.FC<{
   fields: Field[];
   onChange: (fields: Field[]) => void;
 }> = ({ fields, onChange }) => {
@@ -48,16 +48,29 @@ const BodyForm: React.FC<{
     const updated = [...fields];
     updated[index][key] = value;
 
+    // Add new empty row when typing in last row name
     if (key === "name" && index === fields.length - 1 && value.trim() !== "") {
-      updated.push({ name: "", type: "string", defaultValue: "", required: false });
+      updated.push({
+        name: "",
+        type: "string",
+        defaultValue: "",
+        required: false,
+      });
     }
 
+    // Remove empty rows (except last)
     if (key === "name" && value.trim() === "" && index !== fields.length - 1) {
       updated.splice(index, 1);
     }
 
+    // Ensure at least one empty row exists
     if (updated.length === 0) {
-      updated.push({ name: "", type: "string", defaultValue: "", required: false });
+      updated.push({
+        name: "",
+        type: "string",
+        defaultValue: "",
+        required: false,
+      });
     }
 
     onChange(updated);
@@ -66,7 +79,12 @@ const BodyForm: React.FC<{
   const handleDelete = (index: number) => {
     const updated = fields.filter((_, i) => i !== index);
     if (updated.length === 0) {
-      updated.push({ name: "", type: "string", defaultValue: "", required: false });
+      updated.push({
+        name: "",
+        type: "string",
+        defaultValue: "",
+        required: false,
+      });
     }
     onChange(updated);
   };
@@ -76,11 +94,21 @@ const BodyForm: React.FC<{
       <table className="min-w-full border border-border rounded-md">
         <thead className="bg-muted/20">
           <tr>
-            <th className="text-left px-6 py-2 text-sm font-medium min-w-[120px]">Name *</th>
-            <th className="text-left px-6 py-2 text-sm font-medium min-w-[100px]">Type</th>
-            <th className="text-left px-6 py-2 text-sm font-medium min-w-[160px]">Default Example Value</th>
-            <th className="text-left px-6 py-2 text-sm font-medium min-w-[100px]">Required</th>
-            <th className="text-left px-6 py-2 text-sm font-medium min-w-[120px]">Actions</th>
+            <th className="text-left px-6 py-2 text-sm font-medium min-w-[120px]">
+              Name *
+            </th>
+            <th className="text-left px-6 py-2 text-sm font-medium min-w-[100px]">
+              Type
+            </th>
+            <th className="text-left px-6 py-2 text-sm font-medium min-w-[160px]">
+              Default Example Value
+            </th>
+            <th className="text-left px-6 py-2 text-sm font-medium min-w-[100px]">
+              Required
+            </th>
+            <th className="text-left px-6 py-2 text-sm font-medium min-w-[120px]">
+              Actions
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -91,14 +119,18 @@ const BodyForm: React.FC<{
                   type="text"
                   required={index !== fields.length - 1}
                   value={field.name}
-                  onChange={(e) => handleFieldChange(index, "name", e.target.value)}
+                  onChange={(e) =>
+                    handleFieldChange(index, "name", e.target.value)
+                  }
                   className="w-full px-2 py-1 rounded-md border border-border bg-background text-foreground"
                 />
               </td>
               <td className="px-3 py-2">
                 <select
                   value={field.type}
-                  onChange={(e) => handleFieldChange(index, "type", e.target.value)}
+                  onChange={(e) =>
+                    handleFieldChange(index, "type", e.target.value)
+                  }
                   className="w-full px-2 py-1 rounded-md border border-border bg-background text-foreground"
                 >
                   {FIELD_TYPES.map((t) => (
@@ -110,7 +142,9 @@ const BodyForm: React.FC<{
                 <input
                   type="text"
                   value={field.defaultValue}
-                  onChange={(e) => handleFieldChange(index, "defaultValue", e.target.value)}
+                  onChange={(e) =>
+                    handleFieldChange(index, "defaultValue", e.target.value)
+                  }
                   className="w-full px-2 py-1 rounded-md border border-border bg-background text-foreground"
                 />
               </td>
@@ -118,7 +152,9 @@ const BodyForm: React.FC<{
                 <input
                   type="checkbox"
                   checked={field.required}
-                  onChange={(e) => handleFieldChange(index, "required", e.target.checked)}
+                  onChange={(e) =>
+                    handleFieldChange(index, "required", e.target.checked)
+                  }
                 />
               </td>
               <td className="px-7 py-2 flex flex-col sm:flex-row gap-2">
@@ -138,6 +174,7 @@ const BodyForm: React.FC<{
   );
 };
 
+// --- Main Component ---
 const AddEndpointForm: React.FC<AddEndpointFormProps> = ({
   onCancel,
   onSubmit,
@@ -146,63 +183,56 @@ const AddEndpointForm: React.FC<AddEndpointFormProps> = ({
   const isEditMode = !!initialData;
 
   const [activeTab, setActiveTab] = useState("Headers");
+
   const [name, setName] = useState(initialData?.name || "");
-  const [description, setDescription] = useState(initialData?.description || "");
+  const [description, setDescription] = useState(
+    initialData?.description || ""
+  );
   const [method, setMethod] = useState(initialData?.method || "GET");
   const [path, setPath] = useState(initialData?.path || "");
 
-  const [fields, setFields] = useState<Field[]>([
-    { name: "", type: "string", defaultValue: "", required: false },
-  ]); // For Headers or Query (reuse as before)
-
-  // For body fields
-  const [bodyFields, setBodyFields] = useState<Field[]>([
+  // Separate states for Headers, Query, and Body
+  const [headersFields, setHeadersFields] = useState<Field[]>([
     { name: "", type: "string", defaultValue: "", required: false },
   ]);
+  const [queryFields, setQueryFields] = useState<Field[]>([
+    { name: "", type: "string", defaultValue: "", required: false },
+  ]);
+  const [bodyData, setBodyData] = useState({
+    mediaType: "application/json",
+    payloadName: "",
+    payloadDescription: "",
+    bodyContent: "",
+    fields: [{ name: "", type: "string", defaultValue: "", required: false }],
+  });
 
   const isValid = useMemo(() => name.trim().length > 0, [name]);
-
-  // Reusing your existing field change logic for Headers/Query
-  const handleFieldChange = (index: number, key: keyof Field, value: any) => {
-    let updated = [...fields];
-    updated[index][key] = value;
-
-    if (key === "name" && index === fields.length - 1 && value.trim() !== "") {
-      updated.push({ name: "", type: "string", defaultValue: "", required: false });
-    }
-
-    if (key === "name" && value.trim() === "" && index !== fields.length - 1) {
-      updated.splice(index, 1);
-    }
-
-    if (updated.length === 0) {
-      updated.push({ name: "", type: "string", defaultValue: "", required: false });
-    }
-
-    setFields(updated);
-  };
-
-  const handleDelete = (index: number) => {
-    const updated = fields.filter((_, i) => i !== index);
-    if (updated.length === 0) {
-      updated.push({ name: "", type: "string", defaultValue: "", required: false });
-    }
-    setFields(updated);
-  };
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!isValid) return;
 
-    onSubmit?.({
+    const headers = headersFields.filter((f) => f.name.trim() !== "");
+    const queryParams = queryFields.filter((f) => f.name.trim() !== "");
+    const bodyParams =
+      bodyData.mediaType === "form-data"
+          ? bodyData.fields.filter((f) => f.name.trim() !== "")
+          : bodyData.bodyContent
+    const bodyContentType = bodyData.mediaType;
+
+    const endpointDetails = {
       name: name.trim(),
-      description: description.trim(),
-      method,
       path: path.trim(),
-      headers: activeTab === "Headers" ? fields.filter(f => f.name.trim() !== "") : undefined,
-      query: activeTab === "Query" ? fields.filter(f => f.name.trim() !== "") : undefined,
-      body: activeTab === "Body" && method !== "GET" ? bodyFields.filter(f => f.name.trim() !== "") : undefined,
-    });
+      method,
+      description: description.trim(),
+      queryParameters: queryParams,
+      bodyParameters: bodyParams,
+      bodyContentType,
+      headers,
+    };
+
+    console.log("🚀 Endpoint Details:", endpointDetails);
+    onSubmit?.(endpointDetails);
   }
 
   return (
@@ -212,7 +242,7 @@ const AddEndpointForm: React.FC<AddEndpointFormProps> = ({
       </h2>
 
       <form onSubmit={handleSubmit} className="mt-4 space-y-4">
-        {/* --- Basic Info Section --- */}
+        {/* --- Basic Info --- */}
         <div>
           <label className="block text-sm text-foreground mb-1">
             Name<span className="text-red-500"> *</span>
@@ -262,7 +292,7 @@ const AddEndpointForm: React.FC<AddEndpointFormProps> = ({
               className="w-full px-3 py-2 rounded-md border border-border bg-background text-foreground"
             />
             <p className="text-xs text-gray-500 mt-1">
-              Use <code>{"{curly braces}"}</code> to indicate path params. e.g.,{" "}
+              Use <code>{"{curly braces}"}</code> for path params, e.g.{" "}
               <code>/employees/{"{id}"}</code>
             </p>
           </div>
@@ -286,101 +316,25 @@ const AddEndpointForm: React.FC<AddEndpointFormProps> = ({
           ))}
         </div>
 
-        {/* --- Dynamic Table for Headers & Query --- */}
-        {(activeTab === "Headers" || activeTab === "Query") && (
-          <div className="overflow-x-auto mt-4">
-            <table className="min-w-full border border-border rounded-md">
-              <thead className="bg-muted/20">
-                <tr>
-                  <th className="text-left px-6 py-2 text-sm font-medium min-w-[120px]">
-                    Name *
-                  </th>
-                  <th className="text-left px-6 py-2 text-sm font-medium min-w-[100px]">
-                    Type
-                  </th>
-                  <th className="text-left px-6 py-2 text-sm font-medium min-w-[160px]">
-                    Default Example Value
-                  </th>
-                  <th className="text-left px-6 py-2 text-sm font-medium min-w-[100px]">
-                    Required
-                  </th>
-                  <th className="text-left px-6 py-2 text-sm font-medium min-w-[120px]">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {fields.map((field, index) => (
-                  <tr key={index} className="border-t border-border">
-                    <td className="px-3 py-2">
-                      <input
-                        type="text"
-                        required={index !== fields.length - 1}
-                        value={field.name}
-                        onChange={(e) =>
-                          handleFieldChange(index, "name", e.target.value)
-                        }
-                        className="w-full px-2 py-1 rounded-md border border-border bg-background text-foreground"
-                      />
-                    </td>
-                    <td className="px-3 py-2">
-                      <select
-                        value={field.type}
-                        onChange={(e) =>
-                          handleFieldChange(index, "type", e.target.value)
-                        }
-                        className="w-full px-2 py-1 rounded-md border border-border bg-background text-foreground"
-                      >
-                        {FIELD_TYPES.map((t) => (
-                          <option key={t}>{t}</option>
-                        ))}
-                      </select>
-                    </td>
-                    <td className="px-3 py-2">
-                      <input
-                        type="text"
-                        value={field.defaultValue}
-                        onChange={(e) =>
-                          handleFieldChange(index, "defaultValue", e.target.value)
-                        }
-                        className="w-full px-2 py-1 rounded-md border border-border bg-background text-foreground"
-                      />
-                    </td>
-                    <td className="px-3 py-2 text-center">
-                      <input
-                        type="checkbox"
-                        checked={field.required}
-                        onChange={(e) =>
-                          handleFieldChange(index, "required", e.target.checked)
-                        }
-                      />
-                    </td>
-                    <td className="px-7 py-2 flex flex-col sm:flex-row gap-2">
-                      <button
-                        type="button"
-                        onClick={() => handleDelete(index)}
-                        className="text-red-500 text-sm"
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+        {/* --- Headers Tab --- */}
+        {activeTab === "Headers" && (
+          <FieldTable fields={headersFields} onChange={setHeadersFields} />
         )}
 
-        {/* --- Body Tab Content --- */}
-        {activeTab === "Body" && (
-          method === "GET" ? (
+        {/* --- Query Tab --- */}
+        {activeTab === "Query" && (
+          <FieldTable fields={queryFields} onChange={setQueryFields} />
+        )}
+
+        {/* --- Body Tab --- */}
+        {activeTab === "Body" &&
+          (method === "GET" ? (
             <p className="mt-4 text-red-500 text-sm">
-              Body parameters and body modal is not permitted for GET method.
+              Body parameters are not permitted for GET method.
             </p>
           ) : (
-            <BodyFormData />
-          )
-        )}
+            <BodyFormData value={bodyData} onChange={setBodyData} />
+          ))}
 
         {/* --- Buttons --- */}
         <div className="mt-6 flex gap-2 justify-end">
