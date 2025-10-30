@@ -12,7 +12,7 @@ const FIELD_TYPES = ["string", "number", "boolean", "Array", "Object"];
 interface Field {
   name: string;
   type: string;
-  defaultValue: string;
+  description: string;
   required: boolean;
 }
 
@@ -40,7 +40,7 @@ const BodyFormData: React.FC<BodyFormDataProps> = ({ value, onChange }) => {
     updated[index][key] = val as never;
 
     if (key === "name" && index === fields.length - 1 && val !== "") {
-      updated.push({ name: "", type: "string", defaultValue: "", required: false });
+      updated.push({ name: "", type: "string", description: "", required: false });
     }
 
     update({ fields: updated });
@@ -51,7 +51,7 @@ const BodyFormData: React.FC<BodyFormDataProps> = ({ value, onChange }) => {
     update({
       fields: updated.length
         ? updated
-        : [{ name: "", type: "string", defaultValue: "", required: false }],
+        : [{ name: "", type: "string", description: "", required: false }],
     });
   };
 
@@ -103,7 +103,7 @@ const BodyFormData: React.FC<BodyFormDataProps> = ({ value, onChange }) => {
               <tr>
                 <th className="text-left px-6 py-2 text-sm font-medium min-w-[120px]">Name *</th>
                 <th className="text-left px-6 py-2 text-sm font-medium min-w-[100px]">Type</th>
-                <th className="text-left px-6 py-2 text-sm font-medium min-w-[160px]">Default Example Value</th>
+                <th className="text-left px-6 py-2 text-sm font-medium min-w-[160px]">Description</th>
                 <th className="text-left px-6 py-2 text-sm font-medium min-w-[100px]">Required</th>
                 <th className="text-left px-6 py-2 text-sm font-medium min-w-[120px]">Actions</th>
               </tr>
@@ -131,8 +131,8 @@ const BodyFormData: React.FC<BodyFormDataProps> = ({ value, onChange }) => {
                   </td>
                   <td className="px-3 py-2">
                     <input
-                      value={f.defaultValue}
-                      onChange={(e) => handleFieldChange(i, "defaultValue", e.target.value)}
+                      value={f.description}
+                      onChange={(e) => handleFieldChange(i, "description", e.target.value)}
                       className="w-full px-2 py-1 border border-border rounded-md"
                     />
                   </td>

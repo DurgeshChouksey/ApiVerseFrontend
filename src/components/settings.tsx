@@ -16,16 +16,16 @@ const Settings = () => {
   const [projectName, setProjectName] = useState("");
 
   const handleDelete = () => {
-    if (projectName === "f") {
+    if (projectName === "delete") {
       console.log("API Project deleted");
       // Your delete logic here (API call, etc.)
     } else {
-      alert("Please type 'f' to confirm deletion");
+      alert("Please type 'delete' to confirm deletion");
     }
   };
 
   return (
-    <div className="space-y-3 mt-5">
+    <div className="space-y-3 px-6 mt-5">
       <h1 className="text-2xl font-bold">Delete API Project</h1>
       <p>
         Permanently deleting this API project will remove it from the RapidAPI Hub Listing,
@@ -53,13 +53,13 @@ const Settings = () => {
               </ul>
               <div className="mt-4">
                 <p className="mb-2">
-                  Type this API project name <code>"f"</code> to confirm the deletion:
+                  Type <code>"delete"</code> to confirm the deletion:
                 </p>
                 <input
                   value={projectName}
                   onChange={(e) => setProjectName(e.target.value)}
                   className="border rounded-md p-2 w-full"
-                  placeholder='Type "f"'
+                  placeholder='Type "delete"'
                 />
               </div>
             </AlertDialogDescription>

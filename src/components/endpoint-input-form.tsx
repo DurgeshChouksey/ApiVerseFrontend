@@ -9,6 +9,7 @@ import {
 import { testEndpoint } from "@/features/endpoints/endpointTestSlice";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "@/redux/store";
+import Loading from "@/pages/Loading";
 
 interface EndpointInputFormProps {
 	apiId: string;
@@ -19,18 +20,32 @@ const EndpointInputForm: React.FC<EndpointInputFormProps> = ({
 	apiId,
 	endpointData,
 }) => {
+	console.log(endpointData)
 	const dispatch = useDispatch<AppDispatch>();
 
-	const [formSection, setFormSection] = useState("APIKey");
+	if(!endpointData) {
+		return <Loading />
+	}
+
+	const [formSection, setFormSection] = useState("");
 
 	const [formValues, setFormValues] = useState<{
 		queryParams: Record<string, any>;
 		headers: Record<string, any>;
 		bodyParams: Record<string, any>;
 	}>({
-		queryParams: {},
-		headers: {},
-		bodyParams: {},
+		queryParams:
+			typeof endpointData.queryParameters === "string"
+				? JSON.parse(endpointData.queryParameters)
+				: endpointData.queryParameters || {},
+		headers:
+			typeof endpointData.headers === "string"
+				? JSON.parse(endpointData.headers)
+				: endpointData.headers || {},
+		bodyParams:
+			typeof endpointData.bodyParameters === "string" && endpointData.bodyParameters !== ""
+				? JSON.parse(endpointData.bodyParameters)
+				: endpointData.bodyParameters || {},
 	});
 
 	// RTK Query hooks
@@ -183,6 +198,22 @@ const EndpointInputForm: React.FC<EndpointInputFormProps> = ({
 							className="border border-gray-300 dark:border-gray-700 rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-800 text-gray-400 w-full mb-3 resize-none"
 						/>
 					);
+
+				// ✅ If content type is "form-data", render key-value inputs
+				if (endpointData.bodyContentType === "form-data") {
+					return bodyParams.map((param: any) =>
+						renderInput(
+							param.name,
+							param.name,
+							formValues.bodyParams[param.name] || param.example || "",
+							"Body",
+							param.required,
+							param.description
+						)
+					);
+				}
+
+				// ✅ Otherwise render JSON textarea
 				return (
 					<textarea
 						value={JSON.stringify(formValues.bodyParams || {}, null, 2)}
@@ -207,6 +238,15 @@ const EndpointInputForm: React.FC<EndpointInputFormProps> = ({
 	const handleTesting = async () => {
 		if (!endpointData) return;
 
+		let payload : any = { ...formValues };
+
+		// If bodyContentType is NOT form-data, stringify the bodyParams
+		if (endpointData.bodyContentType !== "form-data") {
+			payload.bodyParams = JSON.stringify(formValues.bodyParams || {});
+		}
+
+		console.log(payload);
+
 		const res = await dispatch(
 			testEndpoint({
 				apiId,
@@ -215,6 +255,8 @@ const EndpointInputForm: React.FC<EndpointInputFormProps> = ({
 				headers: api?.requiresApiKey ? { "x-api-key": apiKey } : {},
 			})
 		);
+
+		console.log(res)
 	};
 
 	return (

@@ -1,10 +1,9 @@
 import Analytics from '@/components/analytics';
 import HubListing from '@/components/hub-listing';
-import Navbar from '@/components/navbar';
 import Settings from '@/components/settings';
 
 import StudioSidebar from '@/components/studio-sidebar';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 const UpdateApi = () => {
   return (
