@@ -8,7 +8,6 @@ import Shuffle from "./ui/shadcn-io/shuffle";
 import SearchBar from "../components/search-bar";
 import { useLogoutUserMutation } from "@/features/user/userApi";
 
-
 interface NavbarProps {
 	isLoggedIn: boolean;
 }
@@ -23,7 +22,8 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn }) => {
 	const [logoutUser] = useLogoutUserMutation();
 	const handleLogout = async () => {
 		await logoutUser(undefined);
-		setTimeout(() => navigate('/signin'), 2000)
+		navigate("/signin");
+		setTimeout(() => window.location.reload(), 100);
 	};
 
 	const Logo = () => (
@@ -103,7 +103,9 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn }) => {
 						</>
 					)}
 				{isLoggedIn &&
-					(currentPage === "/public" || currentPage === "/workspace" || currentPage === "/bookmarks") && (
+					(currentPage === "/public" ||
+						currentPage === "/workspace" ||
+						currentPage === "/bookmarks") && (
 						<>
 							<ModeToggle></ModeToggle>
 							<SearchBar />

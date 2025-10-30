@@ -21,6 +21,7 @@ import ApiOverview from "./pages/ApiOverview";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import { useGetUserProfileQuery } from './features/user/userApi';
+import Category from "./pages/Category";
 
 function App() {
 
@@ -113,7 +114,15 @@ function App() {
 					<ApiOverview />
 				</ProtectedRoute>
 			)
-		}
+		},
+		{
+			path: "/category/:categoryName",
+			element: (
+				<ProtectedRoute>
+					<Category />
+				</ProtectedRoute>
+			)
+		},
 	];
 
 	return (

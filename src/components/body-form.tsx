@@ -19,6 +19,8 @@ interface Field {
 interface BodyFormDataProps {
   value: {
     mediaType: string;
+    payloadName: string;
+    payloadDescription: string;
     bodyContent: string;
     fields: Field[];
   };

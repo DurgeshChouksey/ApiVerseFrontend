@@ -2,7 +2,7 @@ import { useState } from "react";
 import AddEndpointForm from "@/components/add-endpoint-form";
 import { useParams } from "react-router-dom";
 import SearchBar from "@/components/search-bar";
-import { useGetEndpointsQuery } from "@/features/endpoints/endpointsApi";
+import { useDeleteEndpointMutation, useGetEndpointsQuery } from "@/features/endpoints/endpointsApi";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/redux/store";
 
@@ -18,6 +18,7 @@ const Definition = () => {
   const { apiId } = useParams<{ apiId: string }>();
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingEndpoint, setEditingEndpoint] = useState<Endpoint | null>(null);
+  const [deleteEndpoint] = useDeleteEndpointMutation();
 
   // ✅ Get filter value from search slice
   const filter = useSelector((state: RootState) => state.search.filter);
@@ -33,10 +34,23 @@ const Definition = () => {
     setShowAddForm(true);
   };
 
+  if (!apiId) return; // safeguard for type safety
   const handleCreateClick = () => {
     setEditingEndpoint(null);
     setShowAddForm(true);
   };
+
+  const handleDelete = async (endpointId: string) => {
+    if (!apiId) return; // safeguard for type safety
+    const confirmed = window.confirm("Are you sure you want to delete this endpoint?");
+    if (!confirmed) return;
+    try {
+      await deleteEndpoint({ apiId, endpointId });
+      window.location.reload();
+    } catch (e) {
+      // Optionally, handle error here
+    }
+  }
 
   const getMethodColor = (method: string) => {
     switch ((method || "").toUpperCase()) {
@@ -152,7 +166,7 @@ const Definition = () => {
                     Edit
                   </button>
                   <button
-                    onClick={() => console.log("Delete")}
+                    onClick={() => handleDelete(ep.id)}
                     className="px-2 py-1 text-xs rounded-md border border-border bg-background transition-colors text-destructive"
                   >
                     Delete

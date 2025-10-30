@@ -20,11 +20,10 @@ const EndpointInputForm: React.FC<EndpointInputFormProps> = ({
 	apiId,
 	endpointData,
 }) => {
-	console.log(endpointData)
 	const dispatch = useDispatch<AppDispatch>();
 
-	if(!endpointData) {
-		return <Loading />
+	if (!endpointData) {
+		return <Loading />;
 	}
 
 	const [formSection, setFormSection] = useState("");
@@ -43,7 +42,8 @@ const EndpointInputForm: React.FC<EndpointInputFormProps> = ({
 				? JSON.parse(endpointData.headers)
 				: endpointData.headers || {},
 		bodyParams:
-			typeof endpointData.bodyParameters === "string" && endpointData.bodyParameters !== ""
+			typeof endpointData.bodyParameters === "string" &&
+			endpointData.bodyParameters !== ""
 				? JSON.parse(endpointData.bodyParameters)
 				: endpointData.bodyParameters || {},
 	});
@@ -53,8 +53,13 @@ const EndpointInputForm: React.FC<EndpointInputFormProps> = ({
 	const { data: subscriptionData } = useCheckSubscriptionQuery(apiId, {
 		skip: !api, // wait until api data is loaded
 	});
-	// const { data: apiKeyData } = useGetApiKeyQuery(apiId);
-	// console.log(apiKeyData)
+
+	// wait until api data is fetched
+	useEffect(() => {
+		if (!formSection && api) {
+			setFormSection("APIKey");
+		}
+	}, [api, formSection]);
 
 	const apiKey = subscriptionData?.apiKey?.key;
 
@@ -62,8 +67,6 @@ const EndpointInputForm: React.FC<EndpointInputFormProps> = ({
 	useEffect(() => {
 		if (apiKey) {
 			setFormValues((prev) => ({ ...prev, apiKey: apiKey }));
-		} else {
-			setFormValues((prev) => ({ ...prev, apiKey: "" }));
 		}
 	}, [apiKey]);
 
@@ -112,7 +115,7 @@ const EndpointInputForm: React.FC<EndpointInputFormProps> = ({
 				className="border border-gray-300 dark:border-gray-700 rounded-md px-3 py-2 bg-transparent text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
 			/>
 		</div>
-	); 
+	);
 
 	// Render form section
 	const renderFormSection = () => {
@@ -238,7 +241,7 @@ const EndpointInputForm: React.FC<EndpointInputFormProps> = ({
 	const handleTesting = async () => {
 		if (!endpointData) return;
 
-		let payload : any = { ...formValues };
+		let payload: any = { ...formValues };
 
 		// If bodyContentType is NOT form-data, stringify the bodyParams
 		if (endpointData.bodyContentType !== "form-data") {
@@ -256,13 +259,13 @@ const EndpointInputForm: React.FC<EndpointInputFormProps> = ({
 			})
 		);
 
-		console.log(res)
+		console.log(res);
 	};
 
 	return (
 		<div className="border-2 border-gray-300 dark:border-gray-700 p-4 rounded-md">
 			{/* Section Tabs */}
-			<div className="flex gap-2 md:gap-4 bg-gray-200 dark:bg-[#191819] px-4 py-2 rounded-md mb-4">
+			<div className="flex flex-col sm:flex-row gap-2 md:gap-4 bg-gray-200 dark:bg-[#191819] px-4 py-2 rounded-md mb-4">
 				{["APIKey", "Params", "Headers", "Body"].map((section) => (
 					<button
 						key={section}

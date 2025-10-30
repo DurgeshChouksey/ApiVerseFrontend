@@ -1,9 +1,11 @@
 import { Link, useLocation, useParams } from "react-router-dom";
 import Endpoints from "./endpoints";
+import CategoriesNav from "./categories-nav";
 
 const Sidebar = () => {
   const { pathname } = useLocation();
   const { apiId } = useParams<{ apiId: string }>();
+
 
 
   const linkClasses = (path: string) =>
@@ -30,6 +32,8 @@ const Sidebar = () => {
           Workspace
         </Link>
       </nav>
+
+      <CategoriesNav></CategoriesNav>
 
       <Endpoints pathname={pathname} apiId={apiId}></Endpoints>
 

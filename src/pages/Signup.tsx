@@ -17,11 +17,14 @@ export default function SignUp() {
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [isLoading, setLoading] = useState(false);
     const [successMessage, setSuccessMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
 
     async function signupHandler() {
         try {
+            setErrorMessage("");
+            setLoading(true);
             const response = await fetchWithAuth('/api/v1/auth/signup', {
               method: 'POST',
               data: {
@@ -30,13 +33,14 @@ export default function SignUp() {
               }
             })
             console.log(response);
+            setLoading(false);
             setSuccessMessage(response.message);
-            setErrorMessage("");
             setTimeout(() => {
                 navigate('/public')
             }, 1000);
         } catch (error: any) {
             console.log(error);
+            setLoading(false);
             setErrorMessage(error?.response?.data?.errors[0]?.message);
         }
     }
@@ -212,6 +216,11 @@ export default function SignUp() {
 
                 {errorMessage && <p className='text-red-500 underline text-center'>{errorMessage}</p> }
                 {successMessage && <p className='text-green-500 underline text-center'>{successMessage}</p> }
+                {isLoading && (
+									<p className="text-yellow-500 underline text-center">
+										Singing up...
+									</p>
+								)}
 
 
                 {/* Already a user */}

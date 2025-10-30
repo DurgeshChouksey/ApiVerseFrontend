@@ -26,6 +26,7 @@ const General = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [showAuthKey, setShowAuthKey] = useState(false);
+  const [updating, setUpdating] = useState(false);
 
   const { apiId } = useParams();
 
@@ -63,7 +64,8 @@ const General = () => {
   };
 
   const handleUpdate = async () => {
-    try {
+	  setUpdating(true);
+	  try {
       const res = await fetchWithAuth(`/api/v1/apis/${apiId}`, {
         method: "PATCH",
         data: {
@@ -77,6 +79,7 @@ const General = () => {
       setSuccessMessage("");
       setErrorMessage(error?.response?.data?.title);
     }
+	setUpdating(false);
   };
 
   const handleDiscard = () => {
@@ -283,6 +286,9 @@ const General = () => {
 				{/* Buttons */}
 				<div className="flex items-center justify-between mt-3">
 					<div>
+						{updating && (
+							<p className="text-xl text-yellow-500">updating...</p>
+						)}
 						{successMessage && (
 							<p className="text-xl text-green-500">{successMessage}</p>
 						)}
