@@ -33,7 +33,6 @@ export default function SignIn() {
             navigate('/public')
         }, 1000);
       }
-
       if(payload?.status != 200) {
         setErrorMessage(payload?.response?.data?.message);
       }

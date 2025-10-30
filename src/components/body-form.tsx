@@ -19,8 +19,6 @@ interface Field {
 interface BodyFormDataProps {
   value: {
     mediaType: string;
-    payloadName: string;
-    payloadDescription: string;
     bodyContent: string;
     fields: Field[];
   };
@@ -28,7 +26,7 @@ interface BodyFormDataProps {
 }
 
 const BodyFormData: React.FC<BodyFormDataProps> = ({ value, onChange }) => {
-  const { mediaType, payloadName, payloadDescription, bodyContent, fields } = value;
+  const { mediaType, bodyContent, fields } = value;
 
   // --- Handlers ---
   const update = (changes: Partial<BodyFormDataProps["value"]>) => {
@@ -72,24 +70,6 @@ const BodyFormData: React.FC<BodyFormDataProps> = ({ value, onChange }) => {
           ))}
         </select>
       </div>
-
-      {/* Payload name */}
-      <input
-        type="text"
-        placeholder="payload name"
-        value={payloadName}
-        onChange={(e) => update({ payloadName: e.target.value })}
-        className="w-[40%] mt-3 px-3 py-2 rounded-md border border-border bg-background text-foreground"
-      />
-
-      {/* Payload description */}
-      <textarea
-        placeholder="payload description"
-        value={payloadDescription}
-        onChange={(e) => update({ payloadDescription: e.target.value })}
-        rows={3}
-        className="w-full mt-3 px-3 py-2 rounded-md border border-border bg-background text-foreground resize-y"
-      />
 
       {/* Always show Body label */}
       <label className="block mb-2 mt-4 text-sm font-medium text-foreground">
