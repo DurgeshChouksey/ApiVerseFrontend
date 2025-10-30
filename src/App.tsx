@@ -14,7 +14,7 @@ import AboutUs from "./pages/About";
 import Bookmark from "./pages/Bookmark";
 import Studio from "./pages/studio";
 import ApiPlayground from "./pages/ApiPlayground";
-import SubscriptionDetails from "./pages/SubscriptionDetails";
+import SubscriptionDetails from "./pages/subsciptionDetails";
 import UpdateApi from "./pages/UpdateApi";
 import Profile from "./pages/Profile";
 import ApiOverview from "./pages/ApiOverview";
