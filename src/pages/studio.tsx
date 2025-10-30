@@ -18,7 +18,6 @@ interface ProjectFormData {
 const Studio = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [sort, setSort] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   const openForm = () => setIsFormOpen(true);
@@ -28,7 +27,7 @@ const Studio = () => {
 
   // RTK Query hook
   const { data, isLoading, error: queryError, refetch } = useGetMyApisQuery(
-    { page: currentPage, sort, filter: filter || "" }, // replace filter if needed
+    { page: currentPage, filter: filter || "" }, // replace filter if needed
     { refetchOnMountOrArgChange: true }
   );
 
@@ -66,11 +65,6 @@ const Studio = () => {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
-
-  // const handleSortChange = (e: any) => {
-  //   setSort(e.target.value);
-  //   setCurrentPage(1);
-  // };
 
   return (
     <div className="bg-background h-screen text-foreground overflow-hidden">
