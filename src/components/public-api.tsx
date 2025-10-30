@@ -13,7 +13,7 @@ const PublicApi = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const filter = useSelector((state: RootState) => state.search.filter);
 
-  const { data, isLoading, error, refetch } = useGetPublicApisQuery(
+  const { data, isLoading, error } = useGetPublicApisQuery(
     { page: currentPage, sort, filter: filter || "" },
     { refetchOnMountOrArgChange: false }
   );

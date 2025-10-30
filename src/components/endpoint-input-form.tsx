@@ -3,8 +3,7 @@ import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
 import { useGetApiByIdQuery } from "@/features/apis/apisApi";
 import {
-	useCheckSubscriptionQuery,
-	useGetApiKeyQuery,
+	useCheckSubscriptionQuery
 } from "@/features/subscription/subscriptionApi";
 import { testEndpoint } from "@/features/endpoints/endpointTestSlice";
 import { useDispatch } from "react-redux";

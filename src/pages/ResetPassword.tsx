@@ -28,7 +28,7 @@ const ResetPassword = () => {
 			setTimeout(() => {
 				navigate('/signin')
 			}, 2000);
-		} catch (error) {
+		} catch (error: any) {
 			setSuccessMessage("");
 			setErrorMessage(error?.response?.data.message);
 		}

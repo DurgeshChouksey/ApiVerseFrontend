@@ -1,7 +1,6 @@
 import MyApi from "@/components/my-api";
 import Sidebar from "@/components/sidebar";
-import SubscribedApi from "@/components/subscribed";
-import React from "react";
+import SubscribedApi from "../components/Subscribed";
 
 const Workspace = () => {
 	return (

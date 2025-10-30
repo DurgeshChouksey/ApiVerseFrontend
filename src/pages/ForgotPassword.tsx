@@ -17,7 +17,7 @@ const ForgotPassword = () => {
             console.log(res)
 			setErrorMessage("");
 			setSuccessMessage(res.message);
-		} catch (error) {
+		} catch (error: any) {
             console.log(error)
 			setSuccessMessage("");
 			setErrorMessage(error?.response?.data.message);

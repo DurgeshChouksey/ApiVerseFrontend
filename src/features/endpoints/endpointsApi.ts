@@ -47,10 +47,6 @@ export const endpointsApi = createApi({
         body: data,
         credentials: "include",
       }),
-      invalidatesTags: (result, error, { endpointId }) => [
-        { type: "Endpoints", id: endpointId },
-        { type: "Endpoints", id: "LIST" },
-      ],
     }),
 
     // ✅ Delete an endpoint
@@ -61,7 +57,7 @@ export const endpointsApi = createApi({
           method: "DELETE",
           credentials: "include",
         }),
-        invalidatesTags: (result, error, { endpointId }) => [
+        invalidatesTags: ({ endpointId }) => [
           { type: "Endpoints", id: endpointId },
           { type: "Endpoints", id: "LIST" },
         ],

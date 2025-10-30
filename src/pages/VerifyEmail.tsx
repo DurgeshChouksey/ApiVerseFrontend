@@ -22,7 +22,7 @@ const VerifyEmail = () => {
 			setTimeout(() => {
 				navigate("/profile");
 			}, 2000);
-		} catch (error) {
+		} catch (error: any) {
 			setSuccessMessage("");
 			setErrorMessage(error?.response?.data.message);
 		}

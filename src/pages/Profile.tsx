@@ -34,7 +34,7 @@ const Profile = () => {
 			setTimeout(() => {
 				navigate("/verify-email");
 			}, 2000);
-		} catch (error) {
+		} catch (error: any) {
 			console.log(error);
 			setSuccessEmailMessage("");
 			setErrorEmailMessage(error?.response?.data.message);
@@ -60,7 +60,7 @@ const Profile = () => {
 			});
 			setErrorMessage("");
 			setSuccessMessage(res.message);
-		} catch (error) {
+		} catch (error: any) {
 			setSuccessMessage("");
 			setErrorMessage(error?.response?.data.message);
 		}

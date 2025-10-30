@@ -1,9 +1,6 @@
-import { getApi } from "@/features/apis/apiSlice";
 import { fetchWithAuth } from "@/lib/fetchWithAuth";
 import Loading from "@/pages/Loading";
-import type { AppDispatch } from "@/redux/store";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Eye } from 'lucide-react';
 import { useGetApiByIdQuery } from "@/features/apis/apisApi";
@@ -31,7 +28,7 @@ const General = () => {
   const { apiId } = useParams();
 
   // RTK Query hook to fetch API by ID
-  const { data: api, isLoading, error } = useGetApiByIdQuery(apiId!);
+  const { data: api, isLoading } = useGetApiByIdQuery(apiId!);
 
   // Populate formData once API data is loaded
   useEffect(() => {

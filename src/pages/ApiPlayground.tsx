@@ -12,7 +12,7 @@ const ApiPlayground = () => {
   const [endpointData, setEndpointData] = useState<any>(null);
 
   // Fetch endpoints using RTK Query
-  const { data: endpoints, isLoading, error } = useGetEndpointsQuery({ apiId });
+  const { data: endpoints } = useGetEndpointsQuery({ apiId });
 
   // Fetch the selected endpoint from the query result
   useEffect(() => {

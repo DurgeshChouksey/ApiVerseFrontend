@@ -1,7 +1,6 @@
 import { useGetPublicApisQuery } from '@/features/apis/apisApi';
 import Loading from '@/pages/Loading';
 import { Layers } from 'lucide-react';
-import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const CategoriesNav = () => {
@@ -28,7 +27,7 @@ const CategoriesNav = () => {
             </h2>
           </div>
           <ul className="space-y-1">
-            {categories.map((category, idx) => (
+            {categories.map((category: any, idx) => (
               <li
                 key={idx}
                 onClick={() => navigate(`/category/${category}`)}

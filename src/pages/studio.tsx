@@ -67,10 +67,10 @@ const Studio = () => {
     setCurrentPage(page);
   };
 
-  const handleSortChange = (e: any) => {
-    setSort(e.target.value);
-    setCurrentPage(1);
-  };
+  // const handleSortChange = (e: any) => {
+  //   setSort(e.target.value);
+  //   setCurrentPage(1);
+  // };
 
   return (
     <div className="bg-background h-screen text-foreground overflow-hidden">

@@ -64,7 +64,7 @@ export const apisApi = createApi({
 				method: "GET",
 				credentials: "include",
 			}),
-			providesTags: (result, error, apiId) => [{ type: "Api", id: apiId }],
+			providesTags: (apiId) => [{ type: "Api", id: apiId }],
 		}),
 
 		// Delete an API by ID
@@ -74,7 +74,7 @@ export const apisApi = createApi({
 				method: "DELETE",
 				credentials: "include",
 			}),
-			invalidatesTags: (result, error, apiId) => [
+			invalidatesTags: (apiId) => [
 				{ type: "Api", id: apiId },
 				{ type: "MyApis" },
 			],

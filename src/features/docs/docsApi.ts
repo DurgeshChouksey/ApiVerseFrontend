@@ -11,7 +11,6 @@ export const docsApi = createApi({
         url: `/api/v1/apis/${apiId}/docs`,
         method: "GET",
       }),
-      providesTags: (result, error, apiId) => [{ type: "Docs", id: apiId }],
     }),
 
     saveDocs: builder.mutation<{ message: string }, { apiId: string; content: string }>({
@@ -20,7 +19,6 @@ export const docsApi = createApi({
         method: "POST",
         data: { content },
       }),
-      invalidatesTags: (result, error, { apiId }) => [{ type: "Docs", id: apiId }],
     }),
   }),
 });

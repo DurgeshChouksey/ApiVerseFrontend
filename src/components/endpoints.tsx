@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useGetEndpointsQuery } from "@/features/endpoints/endpointsApi";
 
@@ -73,7 +73,7 @@ const Endpoints = ({
 
             <ul className="border-l-2 border-gray-500 flex flex-col mt-5 ml-6 pl-2 space-y-3">
               {endpoints.length > 0 &&
-                endpoints.map((endpoint) => {
+                endpoints.map((endpoint: any) => {
                   const isActive = endpoint.id === endpointId;
                   return (
                     <li key={endpoint.id}>
@@ -125,7 +125,7 @@ const Endpoints = ({
               <option value="" disabled>
                 Select Endpoint
               </option>
-              {endpoints.map((endpoint) => {
+              {endpoints.map((endpoint: any) => {
                 const isActive = endpoint.id === endpointId;
                 return (
                   <option

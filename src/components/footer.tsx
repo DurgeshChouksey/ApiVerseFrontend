@@ -70,9 +70,9 @@ const serviceLinks = [
 ];
 
 const helpfulLinks = [
-  { text: "FAQs", href: data.help.faqs },
-  { text: "Support", href: data.help.support },
-  { text: "API Submission", href: data.help.apiSubmission },
+  { text: "FAQs", href: data.help.faqs, hasIndicator: false},
+  { text: "Support", href: data.help.support, hasIndicator: true },
+  { text: "API Submission", href: data.help.apiSubmission, hasIndicator: false },
 ];
 
 const contactInfo = [
@@ -103,7 +103,7 @@ export default function Footer4Col() {
             </p>
 
             <ul className="mt-8 flex justify-center gap-6 sm:justify-start md:gap-8">
-              {socialLinks.map(({ icon: Icon, label, href }) => (
+              {socialLinks.map(({ icon: Icon, label }) => (
                 <li key={label}>
                   <Link
                     to={"/"}

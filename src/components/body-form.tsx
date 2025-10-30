@@ -1,5 +1,3 @@
-import React, { useEffect, useState } from "react";
-
 const MEDIA_TYPES = [
   "application/json",
   "application/x-www-form-urlencoded",

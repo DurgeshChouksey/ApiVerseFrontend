@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import MDEditor from "@uiw/react-md-editor";
 import { useTheme } from "./theme-provider";
 import { Button } from "./ui/button";

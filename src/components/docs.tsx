@@ -1,13 +1,13 @@
-import React, { useState } from "react";
 import DocsEditor from "@/components/docs-editor";
 import { useParams } from "react-router-dom";
 import Loading from "@/pages/Loading";
 import { useGetDocsQuery, useSaveDocsMutation } from "@/features/docs/docsApi";
+import { useState } from "react";
 
 const Docs = () => {
   const { apiId } = useParams<{ apiId: string }>();
   const { data, isLoading } = useGetDocsQuery(apiId!);
-  const [saveDocs, { isLoading: saving }] = useSaveDocsMutation();
+  const [ saveDocs ] = useSaveDocsMutation();
 
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");

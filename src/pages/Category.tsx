@@ -1,4 +1,3 @@
-import React from "react";
 import { useParams } from "react-router-dom";
 import { useGetPublicApisQuery } from "@/features/apis/apisApi";
 import Loading from "@/pages/Loading";

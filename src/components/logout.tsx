@@ -7,13 +7,13 @@ const Logout = () => {
 
     const dispatch = useDispatch<AppDispatch>();
 
-    const signout = async () => {
+    async () => {
         await dispatch(logoutUser());
     }
 
-    return (<>
-
-    </>)
+    return (
+        <></>
+    )
 }
 
 export default Logout;

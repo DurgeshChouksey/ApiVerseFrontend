@@ -12,7 +12,7 @@ const MyApi = () => {
   const filter = useSelector((state: RootState) => state.search.filter);
 
   // RTK Query hook to fetch user's APIs
-  const { data, isLoading, error, refetch } = useGetMyApisQuery(
+  const { data, isLoading, error } = useGetMyApisQuery(
     { page: currentPage, sort, filter: filter || "" }, // pass filter if needed
     { refetchOnMountOrArgChange: false }      // force fetch on mount
   );

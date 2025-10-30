@@ -29,7 +29,7 @@ const Response: React.FC<ResponseProps> = () => {
 		dispatch(clearResponse());
 	}, [location.pathname, dispatch]);
 
-	const { response, loading, error } = useSelector(
+	const { response, loading } = useSelector(
 		(state: RootState) => state.endpointTest
 	);
 
